@@ -1,0 +1,534 @@
+;; -*- mode: emacs-lisp; coding: emacs-mule; -*-
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Thu Mar  6 02:17:49 2008
+;; Desktop file format version 206
+;; Emacs version 22.1.1
+
+;; Global section:
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring '("double" "Trace" "bool" "double" "Set" "bool" "int" "double" "Square" "Length" "Me_t" "Normalize" "create" "Photon.hh" "Render" "Render.cc"))
+(setq regexp-search-ring nil)
+(setq register-alist (list (desktop-list* 113 (let ((mk (make-marker))) (add-hook 'desktop-delay-hook (list 'lambda '() (list 'set-marker mk 472 (get-buffer "Drawable.hh")))) mk))))
+
+;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Tiny/raytracer.ml"
+  "raytracer.ml"
+  'tuareg-mode
+  '(abbrev-mode)
+  13356
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/General/Types.hh"
+  "Types.hh"
+  'c++-mode
+  '(abbrev-mode)
+  1976
+  '(2343 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Render/Ray.cc"
+  "Ray.cc"
+  'c++-mode
+  '(abbrev-mode)
+  701
+  '(654 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Texture.cc"
+  "Texture.cc"
+  'c++-mode
+  '(abbrev-mode)
+  1402
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Render/Raytracer.hh"
+  "Raytracer.hh"
+  'c++-mode
+  '(abbrev-mode)
+  2377
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Render/Raytracer.cc"
+  "Raytracer.cc"
+  'c++-mode
+  '(abbrev-mode)
+  314
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Texture.hh"
+  "Texture.hh"
+  'c++-mode
+  '(abbrev-mode)
+  2951
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Scene.hh"
+  "Scene.hh"
+  'c++-mode
+  '(abbrev-mode)
+  570
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/General/Testcases.cc"
+  "Testcases.cc"
+  'c++-mode
+  '(overwrite-mode abbrev-mode)
+  5628
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode . overwrite-mode-textual)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Math/Vector.hh"
+  "Vector.hh"
+  'c++-mode
+  '(abbrev-mode)
+  1830
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Math/Matrix.cc"
+  "Matrix.cc"
+  'c++-mode
+  '(abbrev-mode)
+  645
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Graphics/Screen.hh"
+  "Screen.hh"
+  'c++-mode
+  '(abbrev-mode)
+  805
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Graphics/Screen.cc"
+  "Screen.cc"
+  'c++-mode
+  '(abbrev-mode)
+  135
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Graphics/Image.hh"
+  "Image.hh"
+  'c++-mode
+  '(overwrite-mode abbrev-mode)
+  571
+  '(173 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode . overwrite-mode-textual)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Graphics/Image.cc"
+  "Image.cc"
+  'c++-mode
+  '(abbrev-mode)
+  120
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Sphere.cc"
+  "Sphere.cc"
+  'c++-mode
+  '(abbrev-mode)
+  1171
+  '(185 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Plane.hh"
+  "Plane.hh"
+  'c++-mode
+  '(overwrite-mode abbrev-mode)
+  721
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . iso-8859-2) (overwrite-mode . overwrite-mode-textual)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Object.cc"
+  "Object.cc"
+  'c++-mode
+  '(abbrev-mode)
+  51
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Object.hh"
+  "Object.hh"
+  'c++-mode
+  '(abbrev-mode)
+  1147
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Scene.cc"
+  "Scene.cc"
+  'c++-mode
+  '(abbrev-mode)
+  941
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Plane.cc"
+  "Plane.cc"
+  'c++-mode
+  '(abbrev-mode)
+  137
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Math/Vector.cc"
+  "Vector.cc"
+  'c++-mode
+  '(abbrev-mode)
+  752
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Sphere.hh"
+  "Sphere.hh"
+  'c++-mode
+  '(abbrev-mode)
+  374
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Math/Transform.hh"
+  "Transform.hh"
+  'c++-mode
+  '(abbrev-mode)
+  2170
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Math/Transform.cc"
+  "Transform.cc"
+  'c++-mode
+  '(abbrev-mode)
+  1582
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Render/Photon.hh"
+  "Photon.hh"
+  'c++-mode
+  '(abbrev-mode)
+  1047
+  '(116 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Math/Constants.hh"
+  "Constants.hh"
+  'c++-mode
+  '(abbrev-mode)
+  90
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Material.hh"
+  "Material.hh"
+  'c++-mode
+  '(abbrev-mode)
+  201
+  '(204 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Material.cc"
+  "Material.cc"
+  'c++-mode
+  '(abbrev-mode)
+  825
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Color.hh"
+  "Color.hh"
+  'c++-mode
+  '(abbrev-mode)
+  779
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Color.cc"
+  "Color.cc"
+  'c++-mode
+  '(abbrev-mode)
+  96
+  '(96 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Math/Tuple.hh"
+  "Tuple.hh"
+  'c++-mode
+  '(overwrite-mode abbrev-mode)
+  1866
+  '(1 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode . overwrite-mode-textual)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Graphics/Drawable.hh"
+  "Drawable.hh"
+  'c++-mode
+  '(overwrite-mode abbrev-mode)
+  91
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode . overwrite-mode-textual)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Camera.cc"
+  "Camera.cc"
+  'c++-mode
+  '(abbrev-mode)
+  681
+  '(39 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Camera.hh"
+  "Camera.hh"
+  'c++-mode
+  '(abbrev-mode)
+  2512
+  '(57 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Render/Ray.hh"
+  "Ray.hh"
+  'c++-mode
+  '(abbrev-mode)
+  874
+  '(874 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Math/Point.hh"
+  "Point.hh"
+  'c++-mode
+  '(overwrite-mode abbrev-mode)
+  658
+  '(108 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode . overwrite-mode-textual)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Math/Matrix.hh"
+  "Matrix.hh"
+  'c++-mode
+  '(abbrev-mode)
+  1411
+  '(244 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/blaray.cc"
+  "blaray.cc"
+  'c++-mode
+  '(abbrev-mode)
+  2040
+  '(1615 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Light.cc"
+  "Light.cc"
+  'c++-mode
+  '(abbrev-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  nil
+  "Render"
+  'dired-mode
+  nil
+  139
+  '(nil nil)
+  t
+  '("/home/bla/my_projects/blaRAY/Render/")
+  nil)
+
+(desktop-create-buffer 206
+  nil
+  "blaray"
+  'dired-mode
+  nil
+  1041
+  '(nil nil)
+  t
+  '("/home/bla/my_projects/blaRAY/")
+  nil)
+
+(desktop-create-buffer 206
+  nil
+  "Scene"
+  'dired-mode
+  nil
+  549
+  '(nil nil)
+  t
+  '("/home/bla/my_projects/blaRAY/Scene/")
+  nil)
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/General/Debug.hh"
+  "Debug.hh"
+  'c++-mode
+  '(abbrev-mode)
+  53
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Scene/Primitives.hh"
+  "Primitives.hh"
+  'c++-mode
+  '(abbrev-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/General/Testcases.hh"
+  "Testcases.hh"
+  'c++-mode
+  '(abbrev-mode)
+  90
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Render/Photon.cc"
+  "Photon.cc"
+  'c++-mode
+  '(abbrev-mode)
+  49
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+

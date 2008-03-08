@@ -1,0 +1,10 @@
+External
+*.swp
+*.o
+*.cc~
+*.hh~
+\#*\#
+.#*
+*.d
+blaray
+Docs

@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+
+dest=`echo $1 | sed 's/.cc/.d/'`
+object=`echo $1 | sed 's/.cc/.o/'`
+d="$dest $object"
+
+g++ -I. -MM $1 | sed "s,[^:]*:,$d :,g" > $dest
+
