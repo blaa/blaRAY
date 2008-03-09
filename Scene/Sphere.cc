@@ -70,18 +70,18 @@ namespace Scene {
 
 	Math::Point Sphere::UVAt(const Math::Vector &Point) const
 	{
-		const Double x = Point[0], y = Point[1];
-		Math::Vector w = Point - Center;
-		Double V = std::acos(y / Radius) / Math::PI;
-		Double H = std::acos(x /
-				     (Radius * 
-				      std::sin(Math::PI * V)));
+		const Math::Vector w = Point - Center;
+		const Double x = w[0], y = w[1];
+		const Double V = std::acos(y / Radius) / Math::PI;
+		const Double H = std::acos(
+			x / (Radius * std::sin(Math::PI * V))
+			);
 		Double U;
 		if (y > 0.0)
-			U = H / 2 / Math::PI;
+			U = H / 2.0 / Math::PI;
 		else
-			U = (Math::PI + H) / 2 / Math::PI;
-	
+			U = (Math::PI + H) / 2.0 / Math::PI;
+
 		return Math::Point(U, V);
 	}
 

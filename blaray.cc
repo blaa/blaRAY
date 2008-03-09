@@ -94,9 +94,18 @@ void Render2(Graphics::Screen &Scr)
 
 	TexLib::Checked Checked = TexLib::Checked(
 		ColLib::Black(),
-		Color(1.0, 0.8, 0.8));
+		Color(0.8, 0.8, 0.8));
+
+	TexLib::Checked Checked2 = TexLib::Checked(
+		ColLib::Blue(),
+		ColLib::Red(),
+		0.2, 0.2);
 
 	Material SphereMat = MatLib::Glass();
+	Material SphereMat2(
+		Checked2,
+		TexLib::Black(), TexLib::Black(),
+		TexLib::Black());
 
 	Material PlaneMat(
 		Checked,
@@ -111,7 +120,7 @@ void Render2(Graphics::Screen &Scr)
 
 	S.AddObject(new Sphere(
 			    Math::Vector(0.0, 0.0, 10.0),
-			    1.0, SphereMat));
+			    1.0, SphereMat2));
 
 	S.AddObject(new Sphere(
 			    Math::Vector(-1.5, 0.0, 8.0),
@@ -122,12 +131,11 @@ void Render2(Graphics::Screen &Scr)
 			    -1.0,
 			    PlaneMat));
 
-
 	S.AddLight(new PointLight(Math::Vector(3.0, 10.0, 7.0)));
 	S.AddLight(new AmbientLight(Color(0.05, 0.05, 0.05)));
 
-	const Math::Vector Pos(-2.0, 2.0, -2.0);
-	const Math::Vector Dir(0.2, -0.2, 1.0);
+	const Math::Vector Pos(-2.0, 3.0, -2.0);
+	const Math::Vector Dir(0.2, -0.3, 1.0);
 	const Camera C(Pos, Dir);
 	Render::Raytracer R(S, C, false);
 
@@ -144,6 +152,7 @@ int main(void)
 
 	/* Render something */
 	Graphics::Screen Scr(640, 480);
+/*	Graphics::Screen Scr(50, 50); */
 
 	gettimeofday(&A, NULL);
 	Render2(Scr);

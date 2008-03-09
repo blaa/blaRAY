@@ -3,7 +3,7 @@
  * (C) 2008 by Tomasz bla Fortuna <bla@thera.be>, <bla@af.gliwice.pl>
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+d*sa  under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * any later version.
  *
@@ -81,6 +81,7 @@ namespace Graphics {
 
 	void Screen::Refresh()
 	{
+		if (VALGRIND) return;
 		static SDL_Event A = { SDL_USEREVENT };
 		SDL_PushEvent(&A);
 	}
@@ -88,6 +89,7 @@ namespace Graphics {
 
 	void Screen::Save(const std::string Filename) const
 	{
+		if (VALGRIND) return;
 		SDL_SaveBMP(SDL.S, Filename.c_str());
 	}
 
