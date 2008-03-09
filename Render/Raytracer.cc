@@ -19,14 +19,16 @@
 
 namespace Render {
 	const Int Raytracer::AASize = 2;
-	const Int Raytracer::MaxDepth = 10;
+	const Int Raytracer::MaxDepth = 5;
 
 
 	Raytracer::Raytracer(const Scene::Scene &Scene,
 			     const Scene::Camera &Camera,
-			     const Bool Antialiasing)
+			     const Bool Antialiasing,
+			     const Double Atmosphere)
 		: Scene(Scene), Camera(Camera), 
 		  Antialiasing(Antialiasing),
+		  AtmosphereIdx(Atmosphere + 0.00000001), /* Make it unique. This is of course a bug. */
 		  ShadowRays(0),
 		  ReflectedRays(0),
 		  RefractedRays(0)
@@ -42,7 +44,7 @@ namespace Render {
 		Scene::Color &Specular)
 	{
 		/* Init resulting color */
-		Diffuse = Specular = Scene::ColorLib::Black();
+		Diffuse = Specular = Scene::ColLib::Black();
 
 		/* Shadow rays */
 		Double ColPos;
@@ -50,7 +52,6 @@ namespace Render {
 		Scene::Scene::LightIterator Iter(this->Scene);
 		while (const Scene::Light *l = Iter.Next()) {
 			/* Raytracing works only for point and ambient lights */
-			
 			
 			{
 				const Scene::AmbientLight *P;
@@ -75,7 +76,6 @@ namespace Render {
 			if (this->Scene.Collide(ToLight, ColPos, tmp) == true)
 				continue;
 
-
 			/* Unshadowed light */
 			const Math::Vector &LightDir = ToLight.Direction();
 			const Scene::Color &LightColor = P->GetColor();
@@ -85,8 +85,6 @@ namespace Render {
 			Double CoeffSpecular = Reflect.Direction().Dot(LightDir);
 			if (CoeffSpecular < 0.0)
 				CoeffSpecular = 0.0;
-			else
-				CoeffSpecular = std::pow(CoeffSpecular, Shininess);
 
 			Diffuse += LightColor * CoeffDiffuse;
 			Specular += LightColor * CoeffSpecular;
@@ -94,31 +92,31 @@ namespace Render {
 
 	}
  
-	Bool Raytracer::Trace(const Ray &R, Scene::Color &C, const Int Depth)
+	Bool Raytracer::Trace(const Ray &R,
+			      Scene::Color &C,
+			      const Int Depth,
+			      const Double CurIdx)
 	{
-		Double ColPos = 0.0;
-		Bool Collision = false;
 		const Scene::Object *Obj = NULL;
 
 		/* Check collision with scene objects */
-		Collision = this->Scene.Collide(R, ColPos, Obj);
-		if (Collision == false) {
+		Double ColPos = 0.0;
+		if (this->Scene.Collide(R, ColPos, Obj) == false) {
 			return false;
 		}
 		const Math::Vector ColPoint = R.GetPoint(ColPos);
 		const Math::Vector Normal = Obj->NormalAt(ColPoint);
 		const Ray ReflectRay = R.Reflect(Normal, ColPoint);
-
 		/* Found collision with object Obj, at ColPoint
 		 * with normal Normal.
 		 */
-		Scene::Color Diffuse, Specular, Reflect, Refract;
-		TraceLights(ColPoint,
-			    Normal,
-			    ReflectRay,
-			    12.0,
-			    Diffuse,
-			    Specular);
+
+		/* Parts of resulting pixel color */
+		Scene::Color
+			Diffuse = Scene::ColLib::Black(),
+			Specular = Scene::ColLib::Black(),
+			Reflect = Scene::ColLib::Black(),
+			Refract = Scene::ColLib::Black();
 
 		const Scene::Color &ObjDiff =
 			Obj->ColorAt(ColPoint, Scene::Material::DIFFUSE);
@@ -128,6 +126,14 @@ namespace Render {
 			Obj->ColorAt(ColPoint, Scene::Material::REFLECT);
 		const Scene::Color &ObjRefr =
 			Obj->ColorAt(ColPoint, Scene::Material::REFRACT);
+		const Double Shininess = 
+			Obj->GetProperty(Scene::Material::SHININESS);
+		const Double NewIdx = 
+			Obj->GetProperty(Scene::Material::INDEX);
+
+		TraceLights(ColPoint, Normal,
+			    ReflectRay, Shininess,
+			    Diffuse, Specular);
 
 		if (Depth < MaxDepth) {
 			/* Reflection tracing */
@@ -136,28 +142,42 @@ namespace Render {
 			    ObjRefl[2] != 0.0)
 			{
 				this->ReflectedRays++;
-				if (!Trace(ReflectRay, Reflect, Depth + 1))
-					Reflect = Scene::ColorLib::Black();
+				if (!Trace(ReflectRay, Reflect,
+					   Depth + 1, CurIdx))
+					Reflect = Scene::ColLib::Black();
 			}
 			
 			/* Refraction tracing */
-			/*  if (ObjRefr[0] != 0.0 ||
+			if (ObjRefr[0] != 0.0 ||
 			    ObjRefr[1] != 0.0 ||
 			    ObjRefr[2] != 0.0)
 			{
-				const Ray RefractRay = R.Refract(Normal, ColPoint);
+				Double IntoIdx;
+				Math::Vector RealNormal = Normal;
+				if (NewIdx == CurIdx) {
+					/* We are currently in this object,
+					   leave it - it's not a good way
+					   of handling this situation. */
+					IntoIdx = this->AtmosphereIdx;
+					RealNormal = - Normal;
+				} 
+				else IntoIdx = NewIdx;
+
+				const Ray RefractRay = 
+					R.Refract(RealNormal, ColPoint,
+						  CurIdx, IntoIdx);
 				this->RefractedRays++;
-				if (!Trace(ReflectRay, Reflect, Depth + 1))
-					Reflect = Scene::ColorLib::Black();
-			} */
-
-
+				if (!Trace(RefractRay,
+					   Refract,
+					   Depth + 1,
+					   NewIdx));
+			}
 		}
-
-/*		const Scene::Color &ObjC3 =
-		Obj->ColorAt(ColPoint, Scene::Material::DIFFUSE); */
-		C = Diffuse * ObjDiff + Specular * ObjSpec + Reflect * ObjRefl;
-/*		C = ShadowColor;*/
+		C =
+			Diffuse * ObjDiff +
+			(Specular * ObjSpec).Pow(Shininess) +
+			Reflect * ObjRefl +
+			Refract * ObjRefr;
 		return true;
 	}
 
@@ -177,12 +197,20 @@ namespace Render {
 		std::cout << "*** Raytracing renderer ***" << std::endl;
 		
 		Scene::Color C;
+
+		/* Debug part */
+/*		Ray RR = V.At(327,263);
+		this->Trace(RR, C, 0, AtmosphereIdx); 
+		return; */
+		/* End of debug part */
+
 		/* Iterate over rays created from camera. */
 		if (!this->Antialiasing)
 			for (Int x = 0; x < Width; x++) {
 				for (Int y = 0; y < Height; y++) {
 					Ray R = V.At(x, y);
-					if (this->Trace(R, C, 0) == true) {
+					if (this->Trace(R, C, 0,
+							AtmosphereIdx) == true) {
 						Img.PutPixel(x, y, C);
 					} else {
 						Img.PutPixel(x, y, Background);
@@ -204,7 +232,8 @@ namespace Render {
 					Ray TracedRay = V.At(
 						x * AASize + aa_x,
 						y * AASize + aa_y);
-					if (this->Trace(TracedRay, C, 0) == true) {
+					if (this->Trace(TracedRay, C, 0, 
+							AtmosphereIdx) == true) {
 						R += C[0];
 						G += C[1];
 						B += C[2];
@@ -217,7 +246,7 @@ namespace Render {
 				C = Scene::Color(R/AASize/AASize,
 						 G/AASize/AASize,
 						 B/AASize/AASize);
-//				C = Scene::ColorLib::Red();
+//				C = Scene::ColLib::Red();
 				Img.PutPixel(x, y, C);
 			}
 		}

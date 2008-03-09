@@ -105,8 +105,8 @@ namespace Testcases {
 	{
 		/* Textures/Colors  */
 		cout << "*** Scene testcase ***" << endl;
-		Scene::Color C1 = Scene::ColorLib::White();
-		Scene::Color C2 = Scene::ColorLib::Red();
+		Scene::Color C1 = Scene::ColLib::White();
+		Scene::Color C2 = Scene::ColLib::Blue();
 
 		cout << C1 << " " << C2 << endl;
 
@@ -204,7 +204,7 @@ namespace Testcases {
 	void Graphics()
 	{
 		Graphics::Screen S(640,480);
-		Scene::Color C1 = Scene::ColorLib::Red();
+		Scene::Color C1 = Scene::ColLib::Blue();
 
 		for (Int x=0; x<50; x++) {
 			for (Int y = 0; y < 50; y++)
@@ -215,7 +215,6 @@ namespace Testcases {
 
 	void Explicit()
 	{
-
 		/** Compile time testcase: things that should compile */
 #if 0
 
@@ -280,6 +279,6 @@ namespace Testcases {
 		Render();
 		Scene();
 		Explicit();
-//		Graphics();
+/*		Graphics(); */
 	}
 };

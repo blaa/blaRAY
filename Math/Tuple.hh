@@ -37,10 +37,22 @@ namespace Math {
 		 * by a matrix. */
 		T D[Count];
 
-		/** Crop tuple into bounds 
-		 * \bug Split into CropUpper and CropLower
-		 */
-		inline void Crop() {
+		/**{@ Crop tuple into bounds */
+		inline void CropHigh() {
+			for (Int i = 0; i < Count; i++) {
+				if (D[i] > 1.0)
+					D[i] = 1.0;
+			}
+		}
+
+		inline void CropLow() {
+			for (Int i = 0; i < Count; i++) {
+				if (D[i] < 0.0)
+					D[i] = 0.0;
+			}
+		}
+
+		inline void CropBoth() {
 			for (Int i = 0; i < Count; i++) {
 				if (D[i] > 1.0)
 					D[i] = 1.0;
@@ -49,6 +61,8 @@ namespace Math {
 						D[i] = 0.0;
 			}
 		}
+		/*@}*/
+
 
 		std::string Dump() const {
 			std::stringstream s;
@@ -110,7 +124,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				D[i] += M.D[i];
 			}
-			if (DoCropping == true) Crop();
+			if (DoCropping == true) CropHigh();
 			return *this;
 		}
 
@@ -119,7 +133,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				D[i] -= - M.D[i];
 			}
-			if (DoCropping == true) Crop();
+			if (DoCropping == true) CropLow();
 			return *this;
 		}
 
@@ -128,7 +142,6 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				D[i] *= M.D[i];
 			}
-			if (DoCropping == true) Crop();
 			return *this;
 		}
 
@@ -137,7 +150,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				D[i] += M;
 			}
-			if (DoCropping == true) Crop();
+			if (DoCropping == true) CropBoth();
 			return *this;
 		}
 
@@ -146,7 +159,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				D[i] -= M;
 			}
-			if (DoCropping == true) Crop();
+			if (DoCropping == true) CropBoth();
 			return *this;
 		}
 
@@ -155,7 +168,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				D[i] *= M;
 			}
-			if (DoCropping == true) Crop();
+			if (DoCropping == true) CropBoth();
 			return *this;
 		}
 
@@ -164,7 +177,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				D[i] /= M;
 			}
-			if (DoCropping == true) Crop();
+			if (DoCropping == true) CropBoth();
 			return *this;
 		}
 
@@ -175,7 +188,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				NewT.D[i] = this->D[i] + M.D[i];
 			}
-			if (DoCropping == true) NewT.Crop();
+			if (DoCropping == true) NewT.CropHigh();
 			return NewT;
 		}
 
@@ -185,9 +198,24 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				NewT.D[i] = this->D[i] - M.D[i];
 			}
-			if (DoCropping == true) NewT.Crop();
+			if (DoCropping == true) NewT.CropLow();
 			return NewT;
 		}
+
+		/** Tuple unary minus */
+		Tuple operator-() const {
+			Tuple<T, DoCropping, Count> NewT;
+			if (DoCropping == true) {
+				throw std::logic_error("Unary minus called for object with cropping");
+			}
+
+			for (Int i = 0; i < Count; i++) {
+				NewT.D[i] = - this->D[i];
+			}
+			return NewT;
+		}
+
+
 
 		/** Tuple element-by-element multiplication */
 		Tuple operator*(const Tuple &M) const {
@@ -195,7 +223,6 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				NewT.D[i] = this->D[i] * M.D[i];
 			}
-			if (DoCropping == true) NewT.Crop();
 			return NewT;
 		}
 
@@ -205,7 +232,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				NewT.D[i] = this->D[i] + M;
 			}
-			if (DoCropping == true) NewT.Crop();
+			if (DoCropping == true) NewT.CropBoth();
 			return NewT;
 		}
 
@@ -215,7 +242,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				NewT.D[i] = this->D[i] - M;
 			}
-			if (DoCropping == true) NewT.Crop();
+			if (DoCropping == true) NewT.CropBoth();
 			return NewT;
 		}
 
@@ -225,7 +252,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				NewT.D[i] = this->D[i] * M;
 			}
-			if (DoCropping == true) NewT.Crop();
+			if (DoCropping == true) NewT.CropBoth();
 			return NewT;
 		}
 
@@ -235,7 +262,7 @@ namespace Math {
 			for (Int i = 0; i < Count; i++) {
 				NewT.D[i] = this->D[i] / M;
 			}
-			if (DoCropping == true) NewT.Crop();
+			if (DoCropping == true) NewT.CropBoth();
 			return NewT;
 		}
 
@@ -266,6 +293,14 @@ namespace Math {
 		/** \return Tuple length. */
 		inline T operator!() const {
 			return Length();
+		}
+
+		inline Tuple Pow(T Value) {
+			Tuple<T, DoCropping, Count> NewT;
+			for (Int i = 0; i < Count; i++) {
+				NewT.D[i] = std::pow(this->D[i], Value);
+			}
+			return NewT;
 		}
 	};
 };

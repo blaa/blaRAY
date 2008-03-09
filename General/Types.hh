@@ -91,5 +91,4 @@ typedef e_t(double)		Double;
 typedef void			Void;
 /*@}*/
 
-
 #endif

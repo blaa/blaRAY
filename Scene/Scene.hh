@@ -52,7 +52,7 @@ namespace Scene {
 
 		Color Background;
 	public:
-		Scene(const Color &Background = ColorLib::Black())
+		Scene(const Color &Background = ColLib::Black())
 			: Background(Background)
 		{
 			Materials.reserve(20);

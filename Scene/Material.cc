@@ -31,11 +31,8 @@ namespace Scene {
 		   << "/" << M.Refractive
 		   << "/" << M.Absorptive
 		   << "/" << M.Shininess << std::endl;
-
 		return os;
 	}
-
-
 
 	const Material &MatLib::Red()
 	{
@@ -75,13 +72,13 @@ namespace Scene {
 
 	const Material &MatLib::Glass()
 	{
-		static Material M(TexLib::Black(),
-				  TexLib::White(),
-				  TexLib::White(),
-				  TexLib::White(),
-				  0.9, 0.9, 0.1);
+		static const TexLib::Plain Diff = TexLib::Plain(Color(0.0, 0.0, 0.2));
+		static const TexLib::Plain Spec = TexLib::Plain(Color(0.8, 0.8, 0.8));
+		static const TexLib::Plain Refr = TexLib::Plain(Color(0.8, 0.8, 0.8));
+		static const TexLib::Plain Refl = TexLib::Plain(Color(0.1, 0.1, 0.1));
+
+		static Material M(Diff, Spec, Refr, Refl,
+				  0.9, 0.9, 1.0, 7.8, IdxGlass);
 		return M;
 	}
-
-
 };

@@ -55,14 +55,6 @@ namespace Scene {
 			D[2] = T[2];
 		}
 
-		/** Color accessor */
-		inline void Get(Double &r, Double &g, Double &b) const
-		{
-			r = D[R];
-			g = D[G];
-			b = D[B];
-		}
-
 		/** Debug function */
 		friend std::ostream &operator<<(std::ostream &os, const Color &C);
 	};
@@ -71,7 +63,7 @@ namespace Scene {
 	 * \brief
 	 *	Color library
 	 */
-	namespace ColorLib {
+	namespace ColLib {
 		/**@{ Creates simple, named color object */
 		inline Color White()
 		{

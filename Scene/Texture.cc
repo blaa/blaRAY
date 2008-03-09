@@ -58,37 +58,37 @@ namespace Scene {
 
 		const Texture &Red()
 		{
-			static Plain T(ColorLib::Red());
+			static Plain T(ColLib::Red());
 			return T;
 		}
 
 		const Texture &Green()
 		{
-			static Plain T(ColorLib::Green());
+			static Plain T(ColLib::Green());
 			return T;
 		}
 
 		const Texture &Blue()
 		{
-			static Plain T(ColorLib::Red());
+			static Plain T(ColLib::Red());
 			return T;
 		}
 
 		const Texture &White()
 		{
-			static Plain T(ColorLib::White());
+			static Plain T(ColLib::White());
 			return T;
 		}
 
 		const Texture &Black()
 		{
-			static Plain T(ColorLib::Black());
+			static Plain T(ColLib::Black());
 			return T;
 		}
 
 		const Texture &Gray()
 		{
-			static Plain T(ColorLib::Gray());
+			static Plain T(ColLib::Gray());
 			return T;
 		}
 

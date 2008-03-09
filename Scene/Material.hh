@@ -83,7 +83,7 @@ namespace Scene {
 		}
 
 		/** Get material property */
-		inline Double GetProperty(Property p)
+		inline Double GetProperty(Property p) const
 		{
 			switch (p) {
 			case REFLECTIVE: return Reflective;

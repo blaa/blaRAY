@@ -59,19 +59,30 @@ namespace Scene {
 		virtual ~Object();
 
 		/** Debug function */
-		friend std::ostream &operator<<(std::ostream &os, const Object &O);
+		friend std::ostream &operator<<(std::ostream &os,
+						const Object &O);
 
 		/** Find a collision point with a ray */
-		virtual Bool Collide(const Render::Ray &R, Double &RayPos) const = 0;
+		virtual Bool Collide(const Render::Ray &R,
+				     Double &RayPos) const = 0;
 
 		/** Find a normal to the object at it's surface */
-		virtual Math::Vector NormalAt(const Math::Vector &Point) const = 0;
+		virtual Math::Vector NormalAt(
+			const Math::Vector &Point) const = 0;
 
 		/** Find object UV coordinates at specified surface location */
 		virtual Math::Point UVAt(const Math::Vector &Point) const = 0;
 
 		/** Get color of specified material filter at given object point */
-		const Color ColorAt(const Math::Vector &Point, Material::Filter F) const;
+		inline const Color ColorAt(const Math::Vector &Point,
+					   const Material::Filter F) const {
+			return this->M.GetColor(F, UVAt(Point));
+		}
+
+		/** Get a property of object material */
+		inline Double GetProperty(Material::Property P) const {
+			return this->M.GetProperty(P);
+		}
 	};
 };
 

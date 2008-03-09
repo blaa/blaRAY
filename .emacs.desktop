@@ -13,6 +13,7 @@
 (setq search-ring '("double" "Trace" "bool" "double" "Set" "bool" "int" "double" "Square" "Length" "Me_t" "Normalize" "create" "Photon.hh" "Render" "Render.cc"))
 (setq regexp-search-ring nil)
 (setq register-alist (list (desktop-list* 113 (let ((mk (make-marker))) (add-hook 'desktop-delay-hook (list 'lambda '() (list 'set-marker mk 472 (get-buffer "Drawable.hh")))) mk))))
+(setq compile-command "cd ~/my_projects/blaRAY; make ")
 
 ;; Buffer section -- buffers listed in same order as in buffer list:
 (desktop-create-buffer 206

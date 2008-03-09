@@ -45,24 +45,18 @@ void Render1(Graphics::Screen &Scr)
 	const Math::Vector V1(0.0, 0.0, 0.0);
 	const Math::Vector V2(0.0, 0.0, 1.0);
 
-	::Scene::Scene S(ColorLib::Black());
+	::Scene::Scene S(ColLib::Black());
 
 	const Texture &Plain = TexLib::Plain(
 		Color(0.2, 0.2, 0.2));
 
-//	TexLib::Plain Plain = TexLib::Plain(
-	//	Color(0.2, 0.2, 0.2));
 	TexLib::Checked Checked = TexLib::Checked();
-
-//	S.AddTexture(Plain);
-//	S.AddTexture(Checked);
 
 	Material SphereMat(
 		TexLib::Red(),
 		TexLib::White(),
 		TexLib::Black(),
 		Plain);
-//		::Scene::TexLib::Plain(::Scene::Color(0.2, 0.2, 0.2)));
 
 	Material PlaneMat(
 		Checked,
@@ -92,6 +86,56 @@ void Render1(Graphics::Screen &Scr)
 	R.Render(Scr);
 }
 
+void Render2(Graphics::Screen &Scr)
+{
+	using namespace Scene;
+
+	::Scene::Scene S(ColLib::Black());
+
+	TexLib::Checked Checked = TexLib::Checked(
+		ColLib::Black(),
+		Color(1.0, 0.8, 0.8));
+
+	Material SphereMat = MatLib::Glass();
+
+	Material PlaneMat(
+		Checked,
+		TexLib::Black(),
+		TexLib::Black(),
+		TexLib::Black()
+		);
+
+	S.AddObject(new Sphere(
+			    Math::Vector(1.0, 0.0, 8.0),
+			    1.0, SphereMat));
+
+	S.AddObject(new Sphere(
+			    Math::Vector(0.0, 0.0, 10.0),
+			    1.0, SphereMat));
+
+	S.AddObject(new Sphere(
+			    Math::Vector(-1.5, 0.0, 8.0),
+			    1.0, SphereMat));
+
+	S.AddObject(new Plane(
+			    Math::Vector(0.0, 1.0, 0.0),
+			    -1.0,
+			    PlaneMat));
+
+
+	S.AddLight(new PointLight(Math::Vector(3.0, 10.0, 7.0)));
+	S.AddLight(new AmbientLight(Color(0.05, 0.05, 0.05)));
+
+	const Math::Vector Pos(-2.0, 2.0, -2.0);
+	const Math::Vector Dir(0.2, -0.2, 1.0);
+	const Camera C(Pos, Dir);
+	Render::Raytracer R(S, C, false);
+
+	std::cout << "Raytracing with " << C;
+
+	R.Render(Scr);
+}
+
 
 int main(void)
 {
@@ -102,7 +146,7 @@ int main(void)
 	Graphics::Screen Scr(640, 480);
 
 	gettimeofday(&A, NULL);
-	Render1(Scr);
+	Render2(Scr);
 	gettimeofday(&B, NULL);
 	e_t(double) ATime = A.tv_sec + 0.000001 * A.tv_usec;
 	e_t(double) BTime = B.tv_sec + 0.000001 * B.tv_usec;

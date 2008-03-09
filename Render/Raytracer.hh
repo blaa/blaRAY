@@ -52,6 +52,7 @@ namespace Render {
 
 		/** Anti-aliasing */
 		const Bool Antialiasing;
+		const Double AtmosphereIdx;
 
 		/** Antialiasing setting:
 		 *  number of pixels creating one picture-pixel */
@@ -99,14 +100,20 @@ namespace Render {
 		 * \return true if ray hit object, false if it was directed to the
 		 * background.
 		 */
-		Bool Trace(const Ray &R, Scene::Color &C, const Int Depth);
+		Bool Trace(const Ray &R,
+			   Scene::Color &C,
+			   const Int Depth,
+			   const Double CurIdx);
 
 	public:
 		/** Initialize renderer
 		 * \param Scene   scene to be rendered
 		 * \param Camera  selected camera view
 		 */
-		Raytracer(const Scene::Scene &Scene, const Scene::Camera &Camera, const Bool Antialiasing = true);
+		Raytracer(const Scene::Scene &Scene,
+			  const Scene::Camera &Camera,
+			  const Bool Antialiasing = true,
+			  const Double Atmosphere = Scene::MatLib::IdxAir);
 
 		/** Renders scene into Image buffer
 		 * \param Img	Drawable object (Screen or Image)

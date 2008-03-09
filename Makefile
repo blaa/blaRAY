@@ -57,8 +57,14 @@ doc:
 	doxygen
 	(cd Docs/latex; make)
 stats:
-	wc *.cc */*.cc */*.hh
-	ls *.cc */*.cc */*.hh | wc -l
+	@echo -n "File count: "
+	@ls *.cc */*.cc */*.hh | wc -l
+	@echo "Line, word, bytes stats:"
+	@wc *.cc */*.cc */*.hh
+	@echo -n "In .hh files: "
+	@wc *.hh */*.hh 2>/dev/null  | tail -n1
+	@echo -n "In .cc files: "
+	@wc *.cc */*.cc 2>/dev/null  | tail -n1
 
 ###
 # Cleaning facilities

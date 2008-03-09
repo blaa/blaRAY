@@ -100,8 +100,8 @@ namespace Scene {
 		public:
 			/** Initialize checked texture */
 			Checked(
-				const Color &A = Scene::ColorLib::White(),
-				const Color &B = Scene::ColorLib::Black(),
+				const Color &A = Scene::ColLib::White(),
+				const Color &B = Scene::ColLib::Black(),
 				const Double SizeU = 1.0,
 				const Double SizeV = 1.0,
 				const Bool Tiled = true)
@@ -116,7 +116,7 @@ namespace Scene {
 				else {
 					if (UV.GetU() > SizeU ||
 					    UV.GetV() > SizeV)
-						return ColorLib::Black();
+						return ColLib::Black();
 				}
 				if ((UV.GetU() < HalfU && UV.GetV() < HalfV) ||
 				    (UV.GetU() > HalfU && UV.GetV() > HalfV))

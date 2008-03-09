@@ -35,13 +35,6 @@ namespace Scene {
 		return s.str();
 	}
 
-
-	const Color Object::ColorAt(const Math::Vector &Point, Material::Filter F) const
-	{
-		return this->M.GetColor(F, UVAt(Point));
-	}
-
-
 	std::ostream &operator<<(std::ostream &os, const Object &O)
 	{
 		os << O.Dump();

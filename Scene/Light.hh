@@ -55,7 +55,7 @@ namespace Scene {
 		virtual std::string Dump() const;
 	public:
 		PointLight(const Math::Vector &Position,
-			   const Color &C = ColorLib::White())
+			   const Color &C = ColLib::White())
 			: Light(C), Position(Position)
 		{
 		}
@@ -70,7 +70,7 @@ namespace Scene {
 
 		virtual std::string Dump() const;
 	public:
-		AmbientLight(const Color &C = ColorLib::Gray())
+		AmbientLight(const Color &C = ColLib::Gray())
 			: Light(C)
 		{
 		}

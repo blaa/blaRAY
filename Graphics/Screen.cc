@@ -50,7 +50,7 @@ namespace Graphics {
 
 		Char R = static_cast<char>(C[0] * 255);
 		Char G = static_cast<char>(C[1] * 255);
-		Char B = static_cast<char>(C[1] * 255);
+		Char B = static_cast<char>(C[2] * 255);
 		Uint32 Pixel = SDL_MapRGB(SDL.S->format, R, G, B);
 
 
