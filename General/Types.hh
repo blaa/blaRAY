@@ -59,6 +59,8 @@ struct explicit_t {
 private:
 	/** Private constructor from any other type */
 	template<typename V> explicit_t(const V &t);
+
+	/** Real hidden in template value */
 	T value;
 public:
 
@@ -67,8 +69,11 @@ public:
 	explicit_t() {};
 	/*@}*/
 
-	/** Returns type */
+	/** Returns reference */
 	operator T& () { return value; }
+
+	/** In case we have const this pointer
+	 * return const reference */
 	operator const T& () const { return value; }
 };
 

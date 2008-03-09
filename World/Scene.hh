@@ -14,7 +14,9 @@
 #define _SCENE_H_
 
 #include <vector>
+#include <stdexcept>
 
+#include "General/Debug.hh"
 #include "Render/Ray.hh"
 
 #include "World/Color.hh"
@@ -69,10 +71,15 @@ namespace World {
 		/** Scene background color */
 		Color Background;
 
-		/** \bug Place here atmosphere refractive index */
+		/** Atmosphere refractive index */
+		Double AtmosphereIdx;
+
 	public:
-		Scene(const Color &Background = ColLib::Black())
-			: Background(Background)
+		/** Initialize scene management */
+		Scene(const Color &Background = ColLib::Black(),
+		      const Double AtmosphereIdx = MatLib::IdxAir)
+			: Background(Background),
+			  AtmosphereIdx(AtmosphereIdx)
 		{
 			Materials.reserve(20);
 			Objects.reserve(20);
@@ -85,44 +92,72 @@ namespace World {
 		 */
 		~Scene();
 
+		/** Add object to scene. It will be freed by 
+		 * scene destructor */
 		inline void AddObject(Object *O)
 		{
+			if (DEBUG && O == NULL)
+				throw std::invalid_argument
+					("Argument can't be a NULL pointer");
 			Objects.push_back(O);
 		}
 
+		/** Add light to the scene. It will be freed
+		 * by scene destructor */
 		inline void AddLight(Light *L)
 		{
+			if (DEBUG && L == NULL)
+				throw std::invalid_argument
+					("Argument can't be a NULL pointer");
 			Lights.push_back(L);
 		}
 
+		/** Add material to the scene. It will be freed
+		 * by scene destructor */
 		inline void AddMaterial(Material *M)
 		{
+			if (DEBUG && M == NULL)
+				throw std::invalid_argument
+					("Argument can't be a NULL pointer");
 			Materials.push_back(M);
 		}
 
+		/** Add texture to the scene. It will be freed
+		 * by scene destructor */
 		inline void AddTexture(Texture *T)
 		{
+			if (DEBUG && T == NULL)
+				throw std::invalid_argument
+					("Argument can't be a NULL pointer");
 			Textures.push_back(T);
 		}
-
 
 		/**
 		 * Finds nearest collision of ray with scene object.
 		 * \bug This should be implemented using an octree, not a vector.
 		 */
 		Bool Collide(const Render::Ray &R, Double &RayPos, const Object* &O) const;
-		Color CheckShadow(const Math::Vector &From) const;
 
+
+		/** Scene background accessor */
 		inline const Color &GetBackground() const
 		{
 			return this->Background;
 		}
 
-		/** \brief Template class for scene iterators */
+		/** Scene atmosphere accessor */
+		inline Double GetAtmosphere() const
+		{
+			return this->AtmosphereIdx;
+		}
+
+		/** \brief Template class for simplified scene iterators */
 		template<typename T>
 		class Iterator {
 		protected:
+			/** Current vector element */
 			typename std::vector<T *>::const_iterator Cur;
+			/** Element after the last element of vector */
 			typename std::vector<T *>::const_iterator End;
 
 		public:

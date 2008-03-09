@@ -103,7 +103,7 @@ namespace World {
 			return GetTexture(f).Get(UV);
 		}
 
-		/** Debug function */
+		/** Pretty-printer */
 		friend std::ostream &operator<<(std::ostream &os, const Material &M);
 	};
 

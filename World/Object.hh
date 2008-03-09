@@ -58,7 +58,7 @@ namespace World {
 		/** Virtual destructor */
 		virtual ~Object();
 
-		/** Debug function */
+		/** Pretty-printer */
 		friend std::ostream &operator<<(std::ostream &os,
 						const Object &O);
 

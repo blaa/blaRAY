@@ -14,6 +14,7 @@
 #define _ABS_H_
 
 namespace Math {
+	/** Return absolute value of arg */
 	template<typename T>
 	inline T Abs(T arg) {
 		if (arg < 0)

@@ -20,7 +20,6 @@
 #include "World/Color.hh"
 
 namespace World {
-
 	/**
 	 * \brief Light interface.
 	 *
@@ -30,52 +29,62 @@ namespace World {
 	 */
 	class Light {
 	protected:
+		/** Light color */
 		const Color C;
 
 		/** Debug function */
 		virtual std::string Dump() const = 0;
 	public:
+		/** Construct light */
 		Light(const Color &C) : C(C)
 		{
 		}
 
+		/** Compulsory virtual destructor */
 		virtual ~Light() {}
+
+		/** Returns light color */
 		inline const Color &GetColor() const {
 			return C;
 		}
 
-		/** Debug function */
+		/** Pretty-printer */
 		friend std::ostream &operator<<(std::ostream &os, const Light &L);
 	};
 
+	/** \brief Scene point light */
 	class PointLight : public Light {
 	protected:
+		/** Point light position */
 		const Math::Vector Position;
 
 		virtual std::string Dump() const;
 	public:
+		/** Construct point light */
 		PointLight(const Math::Vector &Position,
 			   const Color &C = ColLib::White())
 			: Light(C), Position(Position)
 		{
 		}
 
+		/** Position accessor */
 		inline const Math::Vector &GetPosition() const {
 			return Position;
 		}
 	};
 
+	/** \brief Scene ambient light */
 	class AmbientLight : public Light {
 	protected:
 
 		virtual std::string Dump() const;
 	public:
+		/** Construct ambient light */
 		AmbientLight(const Color &C = ColLib::Gray())
 			: Light(C)
 		{
 		}
 	};
-
 }
 
 #endif

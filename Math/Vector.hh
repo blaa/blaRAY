@@ -41,19 +41,19 @@ namespace Math {
 			D[2] = z;
 		}
 
+		/** Default vector constructor (initialize with zeroes) */
 		inline Vector() {
 			D[0] = D[1] = D[2] = 0.0;
 		}
 
+		/** Create vector back from Tuple after calculations */
 		inline Vector(const Tuple<Double, false, 3> &T) {
 			D[0] = T[0]; /* Can it be more optimal? Rather no... */
 			D[1] = T[1];
 			D[2] = T[2];
 		}
 
-
-		/** Debug function.
-		 * \see Matrix::Dump(); */
+		/** Pretty-printer */
 		friend std::ostream &operator<<(std::ostream &os, const Vector &V);
 
 		/** Set all vector coordinates at once */

@@ -27,6 +27,7 @@ namespace Math {
 	 */
 	class Point : public std::pair<Double, Double> {
 	public:
+		/** Construct point given two values */
 		Point(Double U, Double V)
 			: std::pair<Double, Double>(U, V) {}
 

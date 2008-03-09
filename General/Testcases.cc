@@ -22,6 +22,7 @@
 using namespace std;
 
 namespace Testcases {
+	/** Useful local function to wreak havoc */
 	void Fail(std::string s) {
 		cout << "Testcase FAILED (" << s << ")" << std::endl;
 		throw 42;

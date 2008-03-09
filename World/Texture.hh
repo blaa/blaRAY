@@ -63,7 +63,7 @@ namespace World {
 		/** Get texture color at point (u,v) */
 		virtual Color Get(Math::Point UV) const = 0;
 
-		/** Debug function */
+		/** Pretty-printer */
 		friend std::ostream &operator<<(std::ostream &os, const Texture &T);
 	};
 

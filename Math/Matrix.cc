@@ -19,14 +19,6 @@
 #include "General/Debug.hh"
 
 namespace Math {
-	Matrix::Matrix()
-	{
-	}
-
-	Matrix::~Matrix()
-	{
-	}
-
 	void Matrix::Zero()
 	{
 		for (Int i=0; i<16; i++)

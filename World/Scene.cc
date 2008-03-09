@@ -62,6 +62,8 @@ namespace World {
 		return SceneCol;
 	}
 
+	/*@{Iterator specializations constructing 
+	 * iterator from different Scene members */
 	template<> Scene::Iterator<Light>::Iterator(const Scene &S)
 		: Cur(S.Lights.begin()), End(S.Lights.end()) {}
 	template<> Scene::Iterator<Object>::Iterator(const Scene &S)
@@ -70,4 +72,5 @@ namespace World {
 		: Cur(S.Textures.begin()), End(S.Textures.end()) {}
 	template<> Scene::Iterator<Material>::Iterator(const Scene &S)
 		: Cur(S.Materials.begin()), End(S.Materials.end()) {}
+	/*@}*/
 };

@@ -37,7 +37,7 @@ namespace Math {
 		 * by a matrix. */
 		T D[Count];
 
-		/**{@ Crop tuple into bounds */
+		/**@{ Crop tuple into bounds */
 		inline void CropHigh() {
 			for (Int i = 0; i < Count; i++) {
 				if (D[i] > 1.0)
@@ -61,7 +61,7 @@ namespace Math {
 						D[i] = 0.0;
 			}
 		}
-		/*@}*/
+		/*}@*/
 
 
 		std::string Dump() const {

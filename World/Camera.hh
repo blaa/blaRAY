@@ -109,6 +109,7 @@ namespace World {
 		 * which is then used to create rays */
 		View CreateView(Int XRes, Int YRes) const;
 
+		/** Pretty-printer */
 		friend std::ostream &operator<<(std::ostream &os, const Camera &C);
 	};
 };

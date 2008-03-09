@@ -17,7 +17,7 @@ d*sa  under the terms of the GNU General Public License as published by
 
 namespace Graphics {
 	Screen::Screen(const Int Width, const Int Height)
-		: Width(Width), Height(Height)
+		: Drawable(Width, Height)
 	{
 		if (VALGRIND) return;
 
@@ -59,7 +59,6 @@ namespace Graphics {
 		*(Uint32*)Bits = Pixel;
 		if (x % 15 == 0 && y == 0) {
   			Refresh();
-//			SDL_UpdateRect(SDL.S, 0, 0, 0, 0);
 		}
 
 	}
@@ -113,15 +112,4 @@ namespace Graphics {
 			}
 		}
 	}
-
-	Int Screen::GetWidth() const
-	{
-		return Width;
-	}
-
-	Int Screen::GetHeight() const
-	{
-		return Height;
-	}
-
 }

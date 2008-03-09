@@ -15,9 +15,8 @@
 #include "Graphics/Image.hh"
 
 namespace Graphics {
-
 	Image::Image(const Int Width, const Int Height)
-		: Width(Width), Height(Height)
+		: Drawable(Width, Height)
 	{
 		Data = new World::Color[Width * Height];
 	}
@@ -25,16 +24,6 @@ namespace Graphics {
 	Image::~Image()
 	{
 		delete[] Data;
-	}
-
-	Int Image::GetWidth() const
-	{
-		return Width;
-	}
-
-	Int Image::GetHeight() const
-	{
-		return Height;
 	}
 
 	void Image::Refresh()
@@ -45,5 +34,4 @@ namespace Graphics {
 	{
 		
 	}
-
 }

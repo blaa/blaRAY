@@ -52,13 +52,13 @@ namespace Render {
 
 		/** Anti-aliasing */
 		const Bool Antialiasing;
-		const Double AtmosphereIdx;
 
 		/** Antialiasing setting:
 		 *  number of pixels creating one picture-pixel */
 		static const Int AASize;
-		static const Int MaxDepth;
 
+		/** Max depth to recur during rendering */
+		const Int MaxDepth;
 
 		/**@{ Statistics */
 		Int ShadowRays;
@@ -79,12 +79,13 @@ namespace Render {
 		 * \param ColPoint	Collision point
 		 * \param Normal	Normal at collision point
 		 * \param Reflect	Reflect direction vector
+		 * \param Diffuse	Object relevant parameters
+		 * \param Specular	Object relevant parameters
 		 */
 		inline void TraceLights(
 			const Math::Vector &ColPoint,
 			const Math::Vector &Normal,
 			const Ray &Reflect,
-			const Double Shininess,
 			World::Color &Diffuse,
 			World::Color &Specular);
 
@@ -109,11 +110,13 @@ namespace Render {
 		/** Initialize renderer
 		 * \param Scene   scene to be rendered
 		 * \param Camera  selected camera view
+		 * \param Antialiasing	Is antialiasing enabled?
+		 * \param MaxDepth	How much should be recurr
 		 */
 		Raytracer(const World::Scene &Scene,
 			  const World::Camera &Camera,
 			  const Bool Antialiasing = true,
-			  const Double Atmosphere = World::MatLib::IdxAir);
+			  const Int MaxDepth = 5);
 
 		/** Renders scene into Image buffer
 		 * \param Img	Drawable object (Screen or Image)

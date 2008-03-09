@@ -31,11 +31,16 @@ namespace World {
 	 */
 	class Plane : public Object {
 	protected:
+		/** Plane normal */
 		const Math::Vector Normal;
+
+		/** Distance of plane to point (0,0,0)
+		 * along the normal vector */
 		const Double Distance;
 
 		virtual std::string Dump() const;
 	public:
+		/** Construct plane */
 		Plane(const Math::Vector &Normal,
 		      Double Distance,
 		      const Material &M = MatLib::Red(),

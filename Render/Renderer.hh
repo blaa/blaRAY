@@ -19,7 +19,10 @@ namespace Render {
 	/** \brief Renderer interface */
 	class Renderer {
 	public:
+		/** Compulsory virtual destructor */
 		virtual ~Renderer() {}
+
+		/** Function of all renderers */
 		virtual void Render(Graphics::Drawable &Img) = 0;
 	};
 }

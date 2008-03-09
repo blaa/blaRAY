@@ -49,14 +49,16 @@ namespace World {
 		/** Color of 0.0-1.0 Double values */
 		Color(Double r, Double g, Double b);
 
+		/** Create color back from Tuple after calculations */
 		Color(const Math::Tuple<Double, true, 3> &T) {
 			D[0] = T[0];
 			D[1] = T[1];
 			D[2] = T[2];
 		}
 
-		/** Debug function */
-		friend std::ostream &operator<<(std::ostream &os, const Color &C);
+		/** Pretty-printer */
+		friend std::ostream &operator<<(std::ostream &os,
+						const Color &C);
 	};
 
 	/**

@@ -26,7 +26,7 @@ OBJECTS=$(SOURCES:.cc=.o)
 DEPS=$(SOURCES:.cc=.d)
 EXEC=blaray
 
-.PHONY: main clean docclean distclean doc 
+.PHONY: main clean docclean distclean doc doxygen
 
 main: $(EXEC)
 -include $(DEPS)
@@ -53,8 +53,10 @@ $(EXEC): $(OBJECTS)
 ##
 # Docs / Stats
 ##
-doc: 
+doxygen:
 	doxygen
+
+doc: doxygen
 	(cd Docs/latex; make)
 stats:
 	@echo -n "File count: "

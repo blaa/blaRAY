@@ -19,13 +19,23 @@
 #include "World/Object.hh"
 
 namespace World {
+	/** \brief
+	 *	Mathematical sphere (ball rather)
+	 *
+	 * Implements collisions, UV coordinates and normal
+	 * calculations for spheres.
+	 */
 	class Sphere : public Object {
 	protected:
+		/** Sphere center */
 		Math::Vector Center;
+
+		/** Sphere radius */
 		Double Radius;
 
 		virtual std::string Dump() const;
 	public:
+		/** Construct sphere object */
 		Sphere(const Math::Vector &Center,
 		       Double Radius,
 		       const Material &M = MatLib::Red(), 

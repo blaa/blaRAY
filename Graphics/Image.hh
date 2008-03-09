@@ -25,21 +25,22 @@ namespace Graphics {
 	 */
 	class Image : public Drawable {
 	private:
-		const Int Width, Height;
+		/** Image array data */
 		World::Color *Data;
 
 	protected:
-
-		inline const World::Color &Get(Int X, Int Y, const World::Color &C) const
+		/** Reads pixel at position X, Y */
+		inline const World::Color &Get(Int X, Int Y) const
 		{
 			return Data[Y * Width + X];
 		}
 
 	public:
+		/** Construct image */
 		Image(const Int Width, const Int Height);
 		virtual ~Image();
 
-		inline void PutPixel(Int X, Int Y, const World::Color &C)
+		inline void PutPixel(const Int X, const Int Y, const World::Color &C)
 		{
 			if (DEBUG) {
 				if (X > Width || X < 0 || Y > Height || Y < 0)
@@ -48,9 +49,6 @@ namespace Graphics {
 			}
 			Data[Y * Width + X] = C;
 		}
-
-		virtual Int GetWidth() const;
-		virtual Int GetHeight() const;
 
 		virtual void Save(const std::string Filename) const;
 		virtual void Refresh();

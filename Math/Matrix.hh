@@ -39,9 +39,6 @@ namespace Math {
 		Double D[16];
 
 	public:
-		Matrix();
-		~Matrix();
-
 		/*** Basic operations ***/
 		/** Fill matrix with zeroes. */
 		void Zero();
@@ -49,7 +46,7 @@ namespace Math {
 		/** Reset to identity matrix. */
 		void LoadIdentity();
 
-		/** Debug function. Prints matrix on the screen. */
+		/** Pretty-printer */
 		friend std::ostream &operator<<(std::ostream &os, const Matrix &M);
 
 		/** Read specified matrix element.

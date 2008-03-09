@@ -18,17 +18,18 @@
 #include "Render/Raytracer.hh"
 
 namespace Render {
+	/** Square of number of rays used for
+	 * calculating a single pixel on the screen */
 	const Int Raytracer::AASize = 2;
-	const Int Raytracer::MaxDepth = 5;
-
 
 	Raytracer::Raytracer(const World::Scene &Scene,
 			     const World::Camera &Camera,
 			     const Bool Antialiasing,
-			     const Double Atmosphere)
-		: Scene(Scene), Camera(Camera), 
+			     const Int MaxDepth)
+
+		: Scene(Scene), Camera(Camera),
 		  Antialiasing(Antialiasing),
-		  AtmosphereIdx(Atmosphere + 0.00000001), /* Make it unique. This is of course a bug. */
+		  MaxDepth(MaxDepth),
 		  ShadowRays(0),
 		  ReflectedRays(0),
 		  RefractedRays(0)
@@ -39,7 +40,6 @@ namespace Render {
 		const Math::Vector &ColPoint,
 		const Math::Vector &Normal,
 		const Ray &Reflect,
-		const Double Shininess,
 		World::Color &Diffuse,
 		World::Color &Specular)
 	{
@@ -52,7 +52,7 @@ namespace Render {
 		World::Scene::LightIterator Iter(this->Scene);
 		while (const World::Light *l = Iter.Next()) {
 			/* Raytracing works only for point and ambient lights */
-			
+
 			{
 				const World::AmbientLight *P;
 				P = dynamic_cast<const World::AmbientLight *>(l);
@@ -66,7 +66,7 @@ namespace Render {
 			const World::PointLight *P;
 			P = dynamic_cast<const World::PointLight *>(l);
 			if (P == NULL)
-				continue; 
+				continue;
 
 			/* Check if we are shadowed from this light */
 			this->ShadowRays++;
@@ -91,7 +91,7 @@ namespace Render {
 		}
 
 	}
- 
+
 	Bool Raytracer::Trace(const Ray &R,
 			      World::Color &C,
 			      const Int Depth,
@@ -126,13 +126,13 @@ namespace Render {
 			Obj->ColorAt(ColPoint, World::Material::REFLECT);
 		const World::Color &ObjRefr =
 			Obj->ColorAt(ColPoint, World::Material::REFRACT);
-		const Double Shininess = 
+		const Double Shininess =
 			Obj->GetProperty(World::Material::SHININESS);
-		const Double NewIdx = 
+		const Double NewIdx =
 			Obj->GetProperty(World::Material::INDEX);
 
 		TraceLights(ColPoint, Normal,
-			    ReflectRay, Shininess,
+			    ReflectRay,
 			    Diffuse, Specular);
 
 		if (Depth < MaxDepth) {
@@ -146,7 +146,7 @@ namespace Render {
 					   Depth + 1, CurIdx))
 					Reflect = World::ColLib::Black();
 			}
-			
+
 			/* Refraction tracing */
 			if (ObjRefr[0] != 0.0 ||
 			    ObjRefr[1] != 0.0 ||
@@ -158,12 +158,12 @@ namespace Render {
 					/* We are currently in this object,
 					   leave it - it's not a good way
 					   of handling this situation. */
-					IntoIdx = this->AtmosphereIdx;
+					IntoIdx = this->Scene.GetAtmosphere();
 					RealNormal = - Normal;
-				} 
+				}
 				else IntoIdx = NewIdx;
 
-				const Ray RefractRay = 
+				const Ray RefractRay =
 					R.Refract(RealNormal, ColPoint,
 						  CurIdx, IntoIdx);
 				this->RefractedRays++;
@@ -195,12 +195,12 @@ namespace Render {
 		ShadowRays = ReflectedRays = RefractedRays = 0;
 
 		std::cout << "*** Raytracing renderer ***" << std::endl;
-		
+
 		World::Color C;
 
 		/* Debug part */
 /*		Ray RR = V.At(327,263);
-		this->Trace(RR, C, 0, AtmosphereIdx); 
+		this->Trace(RR, C, 0, AtmosphereIdx);
 		return; */
 		/* End of debug part */
 
@@ -209,8 +209,10 @@ namespace Render {
 			for (Int x = 0; x < Width; x++) {
 				for (Int y = 0; y < Height; y++) {
 					Ray R = V.At(x, y);
-					if (this->Trace(R, C, 0,
-							AtmosphereIdx) == true) {
+					if (this->Trace(
+						    R, C,
+						    0, Scene.GetAtmosphere())
+					    == true) {
 						Img.PutPixel(x, y, C);
 					} else {
 						Img.PutPixel(x, y, Background);
@@ -222,7 +224,7 @@ namespace Render {
 			for (Int x = 0; x < Width; x++)
 			for (Int y = 0; y < Height; y++) {
 				R = G = B = 0.0;
-				
+
 				for (Int aa_x = 0;
 				     aa_x < AASize;
 				     aa_x++)
@@ -232,8 +234,10 @@ namespace Render {
 					Ray TracedRay = V.At(
 						x * AASize + aa_x,
 						y * AASize + aa_y);
-					if (this->Trace(TracedRay, C, 0, 
-							AtmosphereIdx) == true) {
+					if (this->Trace(
+						    TracedRay, C, 0,
+						    Scene.GetAtmosphere())
+					    == true) {
 						R += C[0];
 						G += C[1];
 						B += C[2];

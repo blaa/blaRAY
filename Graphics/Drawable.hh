@@ -19,15 +19,38 @@
 
 namespace Graphics {
 
-	/** \brief Drawable interface */
+	/** \brief Abstract drawable interface */
 	class Drawable {
+	protected:
+		/**@{ Drawable size */
+		const Int Width, Height;
+		/*@}*/
+
 	public:
+		/** Interface constructor */
+		inline Drawable(Int Width, Int Height)
+			: Width(Width), Height(Height) {}
+
+		/** Compulsory virtual destructor */
 		virtual ~Drawable() {};
-		virtual Int GetWidth() const = 0;
-		virtual Int GetHeight() const = 0;
+
+		/** Return width */
+		virtual Int GetWidth() const {
+			return this->Width;
+		}
+
+		/** Return height */
+		virtual Int GetHeight() const {
+			return this->Height;
+		}
+
+		/** Puts pixel of specified color at specified location */
 		virtual void PutPixel(Int x, Int y, const World::Color &C) = 0;
 
+		/** Refreshes drawable (stores for images */
 		virtual void Refresh() = 0;
+
+		/** Saves image/screen/whatever to the file */
 		virtual void Save(const std::string Filename) const = 0;
 	};
 };

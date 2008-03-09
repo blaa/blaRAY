@@ -89,11 +89,14 @@ namespace Render {
 			return D;
 		}
 
+		/** Return point in space on the Ray at position Loc 
+		 * given by the equation: RayStart + Direction * Loc */
 		Math::Vector GetPoint(Double Loc) const
 		{
 			return this->S + (this->D * Loc);
 		}
 
+		/** Pretty-printer */
 		friend std::ostream &operator<<(std::ostream &os, const Ray &R);
 	};
 

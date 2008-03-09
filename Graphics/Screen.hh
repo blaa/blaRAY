@@ -37,21 +37,28 @@ namespace Graphics {
 	 */
 	class Screen : public Drawable {
 	protected:
-		const Int Width, Height;
 
+		/** Holds SDL information */
 		struct SDL {
+			/** Surface representing screen */
 			SDL_Surface *S;
+
+			/** SDL Refresh thread data */
 			SDL_Thread *RefreshThread;
-		} SDL;
+		};
+		SDL SDL; /**< SDL Information */
+
+		/** Internal screen thread for refreshing screen
+		 * \param Data	struct SDL 
+		 */
 		static int Thread(void *Data);
 
-
 	public:
+		/** Construct screen */
 		Screen(const Int Width, const Int Height);
+
 		virtual ~Screen();
 		virtual void PutPixel(Int x, Int y, const World::Color &C);
-		virtual Int GetWidth() const;
-		virtual Int GetHeight() const;
 		virtual void Refresh();
 		virtual void Save(const std::string Filename) const;
 		void EventWait() const;
