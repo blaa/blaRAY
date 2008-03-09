@@ -17,10 +17,10 @@
 
 #include "Math/Constants.hh"
 #include "Math/Vector.hh"
-#include "Scene/Scene.hh"
-#include "Scene/Sphere.hh"
+#include "World/Scene.hh"
+#include "World/Sphere.hh"
 
-namespace Scene {
+namespace World {
 	 
 	Bool Sphere::Collide(const Render::Ray &R, Double &RayPos) const
 	{

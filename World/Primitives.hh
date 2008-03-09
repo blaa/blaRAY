@@ -10,35 +10,25 @@
  * See Docs/LICENSE
  *********************/
 
-#include <iostream>
-#include <string>
-#include <sstream>
+#ifndef _PRIMITIVES_H_
+#define _PRIMITIVES_H_
 
-#include "Math/Matrix.hh"
-#include "Math/Vector.hh"
-#include "Scene/Material.hh"
-#include "Scene/Object.hh"
+#error "Not finished. Do not include"
+namespace World {
 
+#if 0
 
+	class Box {
+	public:
+		/* Perpendicular plane vector and two points
+		 * gives two parallel planes */
+		struct {
+			Math::Vector Norm;
+			Math::Vector P[2];
+		} V, H;
 
-namespace Scene {
-	Object::~Object()
-	{
-	}
-
-	std::string Object::Dump() const
-	{
-		std::stringstream s;
-		s << "[Object Mat="
-		  << M
-		  << "]";
-		return s.str();
-	}
-
-	std::ostream &operator<<(std::ostream &os, const Object &O)
-	{
-		os << O.Dump();
-		return os;
-	}
-
+	};
+#endif
 };
+
+#endif

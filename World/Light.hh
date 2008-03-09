@@ -17,9 +17,9 @@
 #include <string>
 
 #include "Math/Vector.hh"
-#include "Scene/Color.hh"
+#include "World/Color.hh"
 
-namespace Scene {
+namespace World {
 
 	/**
 	 * \brief Light interface.

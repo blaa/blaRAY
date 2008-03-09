@@ -14,10 +14,10 @@ MAKEDEPS=./makedeps
 # Source files
 IO=	Graphics/Screen.cc Graphics/Image.cc
 MATH=	Math/Matrix.cc Math/Transform.cc Math/Vector.cc 
-SCENE=	Scene/Object.cc Scene/Plane.cc Scene/Color.cc \
-	Scene/Texture.cc Scene/Material.cc \
-	Scene/Sphere.cc Scene/Light.cc Scene/Camera.cc \
-	Scene/Scene.cc 
+SCENE=	World/Object.cc World/Plane.cc World/Color.cc \
+	World/Texture.cc World/Material.cc \
+	World/Sphere.cc World/Light.cc World/Camera.cc \
+	World/Scene.cc 
 RENDER=	Render/Ray.cc Render/Photon.cc Render/Raytracer.cc
 MISC=	General/Testcases.cc
 SOURCES=$(IO) $(MATH) $(SCENE) $(RENDER) $(MISC) blaray.cc

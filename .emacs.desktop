@@ -50,7 +50,7 @@
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Texture.cc"
+  "/home/bla/my_projects/blaRAY/World/Texture.cc"
   "Texture.cc"
   'c++-mode
   '(abbrev-mode)
@@ -83,7 +83,7 @@
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Texture.hh"
+  "/home/bla/my_projects/blaRAY/World/Texture.hh"
   "Texture.hh"
   'c++-mode
   '(abbrev-mode)
@@ -94,7 +94,7 @@
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Scene.hh"
+  "/home/bla/my_projects/blaRAY/World/Scene.hh"
   "Scene.hh"
   'c++-mode
   '(abbrev-mode)
@@ -182,7 +182,7 @@
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Sphere.cc"
+  "/home/bla/my_projects/blaRAY/World/Sphere.cc"
   "Sphere.cc"
   'c++-mode
   '(abbrev-mode)
@@ -193,7 +193,7 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Plane.hh"
+  "/home/bla/my_projects/blaRAY/World/Plane.hh"
   "Plane.hh"
   'c++-mode
   '(overwrite-mode abbrev-mode)
@@ -204,7 +204,7 @@
   '((buffer-file-coding-system . iso-8859-2) (overwrite-mode . overwrite-mode-textual)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Object.cc"
+  "/home/bla/my_projects/blaRAY/World/Object.cc"
   "Object.cc"
   'c++-mode
   '(abbrev-mode)
@@ -215,7 +215,7 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Object.hh"
+  "/home/bla/my_projects/blaRAY/World/Object.hh"
   "Object.hh"
   'c++-mode
   '(abbrev-mode)
@@ -226,7 +226,7 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Scene.cc"
+  "/home/bla/my_projects/blaRAY/World/Scene.cc"
   "Scene.cc"
   'c++-mode
   '(abbrev-mode)
@@ -237,7 +237,7 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Plane.cc"
+  "/home/bla/my_projects/blaRAY/World/Plane.cc"
   "Plane.cc"
   'c++-mode
   '(abbrev-mode)
@@ -259,7 +259,7 @@
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Sphere.hh"
+  "/home/bla/my_projects/blaRAY/World/Sphere.hh"
   "Sphere.hh"
   'c++-mode
   '(abbrev-mode)
@@ -314,7 +314,7 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Material.hh"
+  "/home/bla/my_projects/blaRAY/World/Material.hh"
   "Material.hh"
   'c++-mode
   '(abbrev-mode)
@@ -325,7 +325,7 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Material.cc"
+  "/home/bla/my_projects/blaRAY/World/Material.cc"
   "Material.cc"
   'c++-mode
   '(abbrev-mode)
@@ -336,7 +336,7 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Color.hh"
+  "/home/bla/my_projects/blaRAY/World/Color.hh"
   "Color.hh"
   'c++-mode
   '(abbrev-mode)
@@ -347,7 +347,7 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Color.cc"
+  "/home/bla/my_projects/blaRAY/World/Color.cc"
   "Color.cc"
   'c++-mode
   '(abbrev-mode)
@@ -380,7 +380,7 @@
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode . overwrite-mode-textual)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Camera.cc"
+  "/home/bla/my_projects/blaRAY/World/Camera.cc"
   "Camera.cc"
   'c++-mode
   '(abbrev-mode)
@@ -391,7 +391,7 @@
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Camera.hh"
+  "/home/bla/my_projects/blaRAY/World/Camera.hh"
   "Camera.hh"
   'c++-mode
   '(abbrev-mode)
@@ -446,7 +446,7 @@
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Light.cc"
+  "/home/bla/my_projects/blaRAY/World/Light.cc"
   "Light.cc"
   'c++-mode
   '(abbrev-mode)
@@ -486,7 +486,7 @@
   549
   '(nil nil)
   t
-  '("/home/bla/my_projects/blaRAY/Scene/")
+  '("/home/bla/my_projects/blaRAY/World/")
   nil)
 
 (desktop-create-buffer 206
@@ -501,7 +501,7 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Scene/Primitives.hh"
+  "/home/bla/my_projects/blaRAY/World/Primitives.hh"
   "Primitives.hh"
   'c++-mode
   '(abbrev-mode)

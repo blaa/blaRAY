@@ -20,9 +20,9 @@
 #include "Math/Vector.hh"
 #include "Render/Ray.hh"
 
-#include "Scene/Material.hh"
+#include "World/Material.hh"
 
-namespace Scene {
+namespace World {
 
 	/**
 	 * \brief
@@ -49,7 +49,7 @@ namespace Scene {
 		virtual std::string Dump() const;
 	public:
 		/** Initializes object */
-		Object(const Scene::Material &M,
+		Object(const Material &M,
 		       Bool Visible = true)
 			: M(M), Visible(Visible)
 		{

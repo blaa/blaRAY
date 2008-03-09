@@ -16,9 +16,9 @@
 #include <iostream>
 #include <string>
 
-#include "Scene/Object.hh"
+#include "World/Object.hh"
 
-namespace Scene {
+namespace World {
 	class Sphere : public Object {
 	protected:
 		Math::Vector Center;

@@ -14,10 +14,10 @@
 #include <string>
 #include <sstream>
 
-#include "Scene/Scene.hh"
-#include "Scene/Plane.hh"
+#include "World/Scene.hh"
+#include "World/Plane.hh"
 
-namespace Scene {
+namespace World {
 
 
 	Bool Plane::Collide(const Render::Ray &R, Double &RayPos) const

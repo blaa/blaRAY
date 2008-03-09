@@ -11,38 +11,29 @@
  *********************/
 
 #include <iostream>
-#include <string>
-#include <sstream>
 
+#include "General/Debug.hh"
+#include "World/Color.hh"
 
-#include "Scene/Light.hh"
+namespace World {
 
-namespace Scene {
-
-	std::ostream &operator<<(std::ostream &os, const Light &L)
+	std::ostream &operator<<(std::ostream &os, const Color &C)
 	{
-		os << L.Dump();
+		os << "[Color " << C.Dump();
+		os << "]";
 		return os;
 	}
 
 
-	std::string PointLight::Dump() const
+	Color::Color(Double r, Double g, Double b)
 	{
-		std::stringstream s;
-		s << "[PointLight Pos="
-		  << Position
-		  << " Color="
-		  << C
-		  << "]";
-		return s.str();
+		if (DEBUG)
+			if ( r<0.0 || g<0.0 || b<0.0 || r>1.0 || g>1.0 | b > 1.0) {
+				std::cout << "Assert: Color value out of range" << std::endl;
+				exit(-1);
+			}
+		this->D[R] = r;
+		this->D[G] = g;
+		this->D[B] = b;
 	}
-
-	std::string AmbientLight::Dump() const
-	{
-		std::stringstream s;
-		s << "[AmbientLight Color="
-		  << C << "]";
-		return s.str();
-	}
-
 }

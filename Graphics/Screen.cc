@@ -44,7 +44,7 @@ namespace Graphics {
 		SDL_Quit();
 	}
 
-	void Screen::PutPixel(Int x, Int y, const Scene::Color &C)
+	void Screen::PutPixel(Int x, Int y, const World::Color &C)
 	{
 		if (VALGRIND) return;
 

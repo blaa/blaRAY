@@ -22,8 +22,8 @@ namespace Render {
 	const Int Raytracer::MaxDepth = 5;
 
 
-	Raytracer::Raytracer(const Scene::Scene &Scene,
-			     const Scene::Camera &Camera,
+	Raytracer::Raytracer(const World::Scene &Scene,
+			     const World::Camera &Camera,
 			     const Bool Antialiasing,
 			     const Double Atmosphere)
 		: Scene(Scene), Camera(Camera), 
@@ -40,22 +40,22 @@ namespace Render {
 		const Math::Vector &Normal,
 		const Ray &Reflect,
 		const Double Shininess,
-		Scene::Color &Diffuse,
-		Scene::Color &Specular)
+		World::Color &Diffuse,
+		World::Color &Specular)
 	{
 		/* Init resulting color */
-		Diffuse = Specular = Scene::ColLib::Black();
+		Diffuse = Specular = World::ColLib::Black();
 
 		/* Shadow rays */
 		Double ColPos;
 
-		Scene::Scene::LightIterator Iter(this->Scene);
-		while (const Scene::Light *l = Iter.Next()) {
+		World::Scene::LightIterator Iter(this->Scene);
+		while (const World::Light *l = Iter.Next()) {
 			/* Raytracing works only for point and ambient lights */
 			
 			{
-				const Scene::AmbientLight *P;
-				P = dynamic_cast<const Scene::AmbientLight *>(l);
+				const World::AmbientLight *P;
+				P = dynamic_cast<const World::AmbientLight *>(l);
 				if (P != NULL) {
 					/* Ambient light */
 					Diffuse += P->GetColor();
@@ -63,8 +63,8 @@ namespace Render {
 				}
 			}
 
-			const Scene::PointLight *P;
-			P = dynamic_cast<const Scene::PointLight *>(l);
+			const World::PointLight *P;
+			P = dynamic_cast<const World::PointLight *>(l);
 			if (P == NULL)
 				continue; 
 
@@ -72,13 +72,13 @@ namespace Render {
 			this->ShadowRays++;
 			Ray ToLight = Ray::RayFromPoints(ColPoint,
 							 P->GetPosition());
-			const Scene::Object *tmp;
+			const World::Object *tmp;
 			if (this->Scene.Collide(ToLight, ColPos, tmp) == true)
 				continue;
 
 			/* Unshadowed light */
 			const Math::Vector &LightDir = ToLight.Direction();
-			const Scene::Color &LightColor = P->GetColor();
+			const World::Color &LightColor = P->GetColor();
 
 			/* Calculate coefficients */
 			Double CoeffDiffuse = Normal.Dot(LightDir);
@@ -93,11 +93,11 @@ namespace Render {
 	}
  
 	Bool Raytracer::Trace(const Ray &R,
-			      Scene::Color &C,
+			      World::Color &C,
 			      const Int Depth,
 			      const Double CurIdx)
 	{
-		const Scene::Object *Obj = NULL;
+		const World::Object *Obj = NULL;
 
 		/* Check collision with scene objects */
 		Double ColPos = 0.0;
@@ -112,24 +112,24 @@ namespace Render {
 		 */
 
 		/* Parts of resulting pixel color */
-		Scene::Color
-			Diffuse = Scene::ColLib::Black(),
-			Specular = Scene::ColLib::Black(),
-			Reflect = Scene::ColLib::Black(),
-			Refract = Scene::ColLib::Black();
+		World::Color
+			Diffuse = World::ColLib::Black(),
+			Specular = World::ColLib::Black(),
+			Reflect = World::ColLib::Black(),
+			Refract = World::ColLib::Black();
 
-		const Scene::Color &ObjDiff =
-			Obj->ColorAt(ColPoint, Scene::Material::DIFFUSE);
-		const Scene::Color &ObjSpec =
-			Obj->ColorAt(ColPoint, Scene::Material::SPECULAR);
-		const Scene::Color &ObjRefl =
-			Obj->ColorAt(ColPoint, Scene::Material::REFLECT);
-		const Scene::Color &ObjRefr =
-			Obj->ColorAt(ColPoint, Scene::Material::REFRACT);
+		const World::Color &ObjDiff =
+			Obj->ColorAt(ColPoint, World::Material::DIFFUSE);
+		const World::Color &ObjSpec =
+			Obj->ColorAt(ColPoint, World::Material::SPECULAR);
+		const World::Color &ObjRefl =
+			Obj->ColorAt(ColPoint, World::Material::REFLECT);
+		const World::Color &ObjRefr =
+			Obj->ColorAt(ColPoint, World::Material::REFRACT);
 		const Double Shininess = 
-			Obj->GetProperty(Scene::Material::SHININESS);
+			Obj->GetProperty(World::Material::SHININESS);
 		const Double NewIdx = 
-			Obj->GetProperty(Scene::Material::INDEX);
+			Obj->GetProperty(World::Material::INDEX);
 
 		TraceLights(ColPoint, Normal,
 			    ReflectRay, Shininess,
@@ -144,7 +144,7 @@ namespace Render {
 				this->ReflectedRays++;
 				if (!Trace(ReflectRay, Reflect,
 					   Depth + 1, CurIdx))
-					Reflect = Scene::ColLib::Black();
+					Reflect = World::ColLib::Black();
 			}
 			
 			/* Refraction tracing */
@@ -185,8 +185,8 @@ namespace Render {
 	{
 		Int Width = Img.GetWidth();
 		Int Height = Img.GetHeight();
-		const Scene::Color &Background = Scene.GetBackground();
-		const Scene::Camera::View V =
+		const World::Color &Background = Scene.GetBackground();
+		const World::Camera::View V =
 			this->Camera.CreateView(
 				Antialiasing ? Int(Width * AASize) : Width,
 				Antialiasing ? Int(Height * AASize) : Height);
@@ -196,7 +196,7 @@ namespace Render {
 
 		std::cout << "*** Raytracing renderer ***" << std::endl;
 		
-		Scene::Color C;
+		World::Color C;
 
 		/* Debug part */
 /*		Ray RR = V.At(327,263);
@@ -243,10 +243,10 @@ namespace Render {
 						B += Background[2];
 					}
 				}
-				C = Scene::Color(R/AASize/AASize,
+				C = World::Color(R/AASize/AASize,
 						 G/AASize/AASize,
 						 B/AASize/AASize);
-//				C = Scene::ColLib::Red();
+//				C = World::ColLib::Red();
 				Img.PutPixel(x, y, C);
 			}
 		}

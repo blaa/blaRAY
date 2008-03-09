@@ -19,7 +19,7 @@
 #include "Math/Transform.hh"
 #include "Math/Vector.hh"
 
-#include "Scene/Color.hh"
+#include "World/Color.hh"
 
 /**
  * \brief
@@ -44,7 +44,7 @@ namespace Render {
 		Math::Vector D;
 
 		/** Current ray color */
-		/*		Scene::Color C; */
+		/*		World::Color C; */
 
 	public:
 		/** Create new ray

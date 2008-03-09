@@ -15,7 +15,7 @@
 
 #include <string.h>
 #include "General/Types.hh"
-#include "Scene/Color.hh"
+#include "World/Color.hh"
 
 namespace Graphics {
 
@@ -25,7 +25,7 @@ namespace Graphics {
 		virtual ~Drawable() {};
 		virtual Int GetWidth() const = 0;
 		virtual Int GetHeight() const = 0;
-		virtual void PutPixel(Int x, Int y, const Scene::Color &C) = 0;
+		virtual void PutPixel(Int x, Int y, const World::Color &C) = 0;
 
 		virtual void Refresh() = 0;
 		virtual void Save(const std::string Filename) const = 0;

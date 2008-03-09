@@ -19,7 +19,7 @@
 #include "Math/Vector.hh"
 #include "Render/Ray.hh"
 
-namespace Scene {
+namespace World {
 
 	/**
 	 * \brief

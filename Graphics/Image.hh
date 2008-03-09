@@ -17,7 +17,7 @@
 #include "General/Types.hh"
 #include "General/Debug.hh"
 #include "Graphics/Drawable.hh"
-#include "Scene/Color.hh"
+#include "World/Color.hh"
 
 namespace Graphics {
 	/**
@@ -26,11 +26,11 @@ namespace Graphics {
 	class Image : public Drawable {
 	private:
 		const Int Width, Height;
-		Scene::Color *Data;
+		World::Color *Data;
 
 	protected:
 
-		inline const Scene::Color &Get(Int X, Int Y, const Scene::Color &C) const
+		inline const World::Color &Get(Int X, Int Y, const World::Color &C) const
 		{
 			return Data[Y * Width + X];
 		}
@@ -39,7 +39,7 @@ namespace Graphics {
 		Image(const Int Width, const Int Height);
 		virtual ~Image();
 
-		inline void PutPixel(Int X, Int Y, const Scene::Color &C)
+		inline void PutPixel(Int X, Int Y, const World::Color &C)
 		{
 			if (DEBUG) {
 				if (X > Width || X < 0 || Y > Height || Y < 0)

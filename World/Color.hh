@@ -21,7 +21,7 @@
 #include "Math/Tuple.hh"
 
 
-namespace Scene {
+namespace World {
 	/**
 	 * \brief
 	 *	Color data and operations.

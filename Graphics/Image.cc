@@ -11,7 +11,7 @@
  *********************/
 
 
-#include "Scene/Color.hh"
+#include "World/Color.hh"
 #include "Graphics/Image.hh"
 
 namespace Graphics {
@@ -19,7 +19,7 @@ namespace Graphics {
 	Image::Image(const Int Width, const Int Height)
 		: Width(Width), Height(Height)
 	{
-		Data = new Scene::Color[Width * Height];
+		Data = new World::Color[Width * Height];
 	}
 
 	Image::~Image()

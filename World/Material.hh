@@ -17,9 +17,9 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "Scene/Texture.hh"
+#include "World/Texture.hh"
 
-namespace Scene {
+namespace World {
 	/**
 	 * \brief
 	 *	Material data and operations.

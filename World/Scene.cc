@@ -14,9 +14,9 @@
 #include <limits>
 #include <vector>
 
-#include "Scene/Scene.hh"
+#include "World/Scene.hh"
 
-namespace Scene {
+namespace World {
 	Scene::~Scene()
 	{
 		for (std::vector<Object *>::iterator i = this->Objects.begin();

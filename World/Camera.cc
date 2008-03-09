@@ -15,10 +15,10 @@
 
 #include "General/Types.hh"
 #include "General/Debug.hh"
-#include "Scene/Camera.hh"
+#include "World/Camera.hh"
 #include "Math/Abs.hh"
 
-namespace Scene {
+namespace World {
 	Camera::Camera(const Math::Vector &Pos, const Math::Vector &Dir,
 		       Double FOV, Bool AutoTop,
 		       const Math::Vector &Top)

@@ -17,40 +17,59 @@
 
 #include "Render/Ray.hh"
 
-#include "Scene/Color.hh"
-#include "Scene/Texture.hh"
-#include "Scene/Material.hh"
+#include "World/Color.hh"
+#include "World/Texture.hh"
+#include "World/Material.hh"
 
-#include "Scene/Object.hh"
-#include "Scene/Plane.hh"
-#include "Scene/Sphere.hh"
+#include "World/Object.hh"
+#include "World/Plane.hh"
+#include "World/Sphere.hh"
 
-#include "Scene/Light.hh"
-#include "Scene/Camera.hh"
+#include "World/Light.hh"
+#include "World/Camera.hh"
 
 /**
  * \brief
- *	Renderable object classes + scene management
+ *	Scene abstraction
  *
  * Classes in this namespace hold scene data: Location of objects,
  * colors, textures, cameras, lights`, etc.
  *
  */
-namespace Scene {
+namespace World {
 	/** Nearest taken in account Ray collision */
 	static const Double NearestCollision(0.001);
 
 	/**
 	 * \brief
-	 *	Collision detection (OCTree), holds scene structure.
+	 *	Collision detection and scene management.
+	 *
+	 * This object holds scene structure, allows to check
+	 * collisions with all scene objects and allows iteration 
+	 * of scene lights. Scene frees in it's destructor memory 
+	 * allocated for objects in the scene (they must be added
+	 * to the structure with Add* functions.
 	 */
 	class Scene {
+		/** Scene materials to be freed */
 		std::vector<Material *> Materials;
+
+		/** Scene textures to be freed */
 		std::vector<Texture *> Textures;
+
+		/** Scene objects to be freed, we check
+		 * collisions with this objects.
+		 * \bug rewrite implementation to use octree */
 		std::vector<Object *> Objects;
+
+		/** Lights we iterate during shadowpass. 
+		 * Freed during scene destruction */
 		std::vector<Light *> Lights;
 
+		/** Scene background color */
 		Color Background;
+
+		/** \bug Place here atmosphere refractive index */
 	public:
 		Scene(const Color &Background = ColLib::Black())
 			: Background(Background)

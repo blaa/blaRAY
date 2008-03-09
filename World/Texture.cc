@@ -14,9 +14,9 @@
 #include <string>
 #include <sstream>
 
-#include "Scene/Texture.hh"
+#include "World/Texture.hh"
 
-namespace Scene {
+namespace World {
 
 	/*** Debug ***/
 	std::string Texture::Dump() const

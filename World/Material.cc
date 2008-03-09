@@ -15,11 +15,11 @@
 
 #include "General/Debug.hh"
 
-#include "Scene/Texture.hh"
-#include "Scene/Material.hh"
+#include "World/Texture.hh"
+#include "World/Material.hh"
 
 
-namespace Scene {
+namespace World {
 
 	std::ostream &operator<<(std::ostream &os, const Material &M)
 	{

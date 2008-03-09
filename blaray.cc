@@ -41,11 +41,11 @@
 
 void Render1(Graphics::Screen &Scr)
 {
-	using namespace Scene;
+	using namespace World;
 	const Math::Vector V1(0.0, 0.0, 0.0);
 	const Math::Vector V2(0.0, 0.0, 1.0);
 
-	::Scene::Scene S(ColLib::Black());
+	Scene::Scene S(ColLib::Black());
 
 	const Texture &Plain = TexLib::Plain(
 		Color(0.2, 0.2, 0.2));
@@ -88,9 +88,9 @@ void Render1(Graphics::Screen &Scr)
 
 void Render2(Graphics::Screen &Scr)
 {
-	using namespace Scene;
+	using namespace World;
 
-	::Scene::Scene S(ColLib::Black());
+	Scene::Scene S(ColLib::Black());
 
 	TexLib::Checked Checked = TexLib::Checked(
 		ColLib::Black(),
@@ -137,7 +137,7 @@ void Render2(Graphics::Screen &Scr)
 	const Math::Vector Pos(-2.0, 3.0, -2.0);
 	const Math::Vector Dir(0.2, -0.3, 1.0);
 	const Camera C(Pos, Dir);
-	Render::Raytracer R(S, C, false);
+	Render::Raytracer R(S, C, true);
 
 	std::cout << "Raytracing with " << C;
 

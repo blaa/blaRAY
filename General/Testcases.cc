@@ -16,7 +16,7 @@
 #include "General/Types.hh"
 
 #include "Graphics/Screen.hh"
-#include "Scene/Scene.hh"
+#include "World/Scene.hh"
 #include "Render/Raytracer.hh"
 
 using namespace std;
@@ -39,7 +39,7 @@ namespace Testcases {
 		cout << c << "[] operator test : " << c[0] << endl;
 
 		/* This mustn't compile */
-/*		Scene::Color Col(1.0, 0.0, 1.0);
+/*		World::Color Col(1.0, 0.0, 1.0);
 		c = a * Col; */
 		{
 			Math::Vector a(1.0, 0.0, 0.0);
@@ -84,14 +84,14 @@ namespace Testcases {
 		const Math::Vector V1(0.0, 0.0, 0.0);
 		const Math::Vector V2(0.0, 0.0, 1.0);
 
-		Scene::Scene S;
-		S.AddObject(new Scene::Sphere(
+		World::Scene S;
+		S.AddObject(new World::Sphere(
 				    Math::Vector(0.0, 0.0, 10.0),
 				    1.0)
 			);
-		S.AddLight(new Scene::PointLight(Math::Vector(0.0, 10.0, 7.0)));
+		S.AddLight(new World::PointLight(Math::Vector(0.0, 10.0, 7.0)));
 
-		Scene::Camera C(V1, V2);
+		World::Camera C(V1, V2);
 		Render::Raytracer R(S, C);
 		Render::Ray(V1, V2);
 
@@ -105,14 +105,14 @@ namespace Testcases {
 	{
 		/* Textures/Colors  */
 		cout << "*** Scene testcase ***" << endl;
-		Scene::Color C1 = Scene::ColLib::White();
-		Scene::Color C2 = Scene::ColLib::Blue();
+		World::Color C1 = World::ColLib::White();
+		World::Color C2 = World::ColLib::Blue();
 
 		cout << C1 << " " << C2 << endl;
 
-		std::auto_ptr<Scene::Texture> Tex1(Scene::TexLib::NewPlain(C1) );
-		std::auto_ptr<Scene::Texture> Tex2(Scene::TexLib::NewChecked(C1, C2, 1.0, 2.0, true) );
-		const Scene::Texture &Tex3 = Scene::TexLib::Red();
+		std::auto_ptr<World::Texture> Tex1(World::TexLib::NewPlain(C1) );
+		std::auto_ptr<World::Texture> Tex2(World::TexLib::NewChecked(C1, C2, 1.0, 2.0, true) );
+		const World::Texture &Tex3 = World::TexLib::Red();
 
 		cout << *Tex1 << endl
 		     << *Tex2 << endl
@@ -121,7 +121,7 @@ namespace Testcases {
 		/* Primitives and collisions */
 
 		/* Plane - ray collision */
-		Scene::Plane Plane1(Math::Vector(0.0, 1.0, 0.0),
+		World::Plane Plane1(Math::Vector(0.0, 1.0, 0.0),
 				    0.0);
 
 		Render::Ray Ray1(Math::Vector(0.0, 3.0, 0.0),
@@ -150,7 +150,7 @@ namespace Testcases {
 
 		/* Sphere - Ray collision  */
 
-		Scene::Sphere Sphere(Math::Vector(0.0, 0.0, 10.0),
+		World::Sphere Sphere(Math::Vector(0.0, 0.0, 10.0),
 				     1.0);
 
 		Render::Ray Ray2(Math::Vector(0.0, 0.0, 0.0),
@@ -178,22 +178,22 @@ namespace Testcases {
 
 
 		/*** Scene testcase ***/
-		Scene::Scene S;
-		S.AddObject(new Scene::Plane(Plane1));
-		S.AddLight(new Scene::PointLight(Math::Vector(1.0, 1.0, 1.0)));
+		World::Scene S;
+		S.AddObject(new World::Plane(Plane1));
+		S.AddLight(new World::PointLight(Math::Vector(1.0, 1.0, 1.0)));
 
 		cout << "*** Dumping lights" << endl;
 		{
-			Scene::Scene::LightIterator Iter(S);
-			while (const Scene::Light *l = Iter.Next()) {
+			World::Scene::LightIterator Iter(S);
+			while (const World::Light *l = Iter.Next()) {
 				cout << *l << endl;
 			}
 		}
 
 		cout << "*** Dumping objects" << endl;
 		{
-			Scene::Scene::ObjectIterator Iter(S);
-			while (const Scene::Object *l = Iter.Next()) {
+			World::Scene::ObjectIterator Iter(S);
+			while (const World::Object *l = Iter.Next()) {
 				cout << *l << endl;
 			}
 		}
@@ -204,7 +204,7 @@ namespace Testcases {
 	void Graphics()
 	{
 		Graphics::Screen S(640,480);
-		Scene::Color C1 = Scene::ColLib::Blue();
+		World::Color C1 = World::ColLib::Blue();
 
 		for (Int x=0; x<50; x++) {
 			for (Int y = 0; y < 50; y++)

@@ -14,7 +14,7 @@
 #define _PHOTON_H_
 
 #include "Math/Vector.hh"
-#include "Scene/Color.hh"
+#include "World/Color.hh"
 
 namespace Render {
 
@@ -35,13 +35,13 @@ namespace Render {
 		Math::Vector Position;
 
 		/** Photon color; wonder if it will be used */
-		Scene::Color Color;
+		World::Color Color;
 
 		/** Needed for luminance calculations */
 		Double Intensity;
 	public:
 		/** Initialize photon */
-		Photon(const Math::Vector &Position, const Scene::Color &Color)
+		Photon(const Math::Vector &Position, const World::Color &Color)
 			: Position(Position), Color(Color) {}
 
 
@@ -52,7 +52,7 @@ namespace Render {
 		}
 
 		/** Photon color accessor */
-		inline const Scene::Color &GetColor()
+		inline const World::Color &GetColor()
 		{
 			return Color;
 		}

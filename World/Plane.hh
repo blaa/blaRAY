@@ -19,9 +19,9 @@
 
 #include "Math/Vector.hh"
 #include "Render/Ray.hh"
-#include "Scene/Object.hh"
+#include "World/Object.hh"
 
-namespace Scene {
+namespace World {
 	/**
 	 * \brief
 	 *	Object abstracting infinite plane.

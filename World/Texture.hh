@@ -19,9 +19,9 @@
 #include <cmath>
 
 #include "Math/Point.hh"
-#include "Scene/Color.hh"
+#include "World/Color.hh"
 
-namespace Scene {
+namespace World {
 
 	/**
 	 * \brief
@@ -100,8 +100,8 @@ namespace Scene {
 		public:
 			/** Initialize checked texture */
 			Checked(
-				const Color &A = Scene::ColLib::White(),
-				const Color &B = Scene::ColLib::Black(),
+				const Color &A = ColLib::White(),
+				const Color &B = ColLib::Black(),
 				const Double SizeU = 1.0,
 				const Double SizeV = 1.0,
 				const Bool Tiled = true)

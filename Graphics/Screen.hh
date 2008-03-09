@@ -19,7 +19,7 @@
  */
 #include <SDL/SDL.h>
 #include "Graphics/Drawable.hh"
-#include "Scene/Color.hh"
+#include "World/Color.hh"
 
 
 /**
@@ -49,7 +49,7 @@ namespace Graphics {
 	public:
 		Screen(const Int Width, const Int Height);
 		virtual ~Screen();
-		virtual void PutPixel(Int x, Int y, const Scene::Color &C);
+		virtual void PutPixel(Int x, Int y, const World::Color &C);
 		virtual Int GetWidth() const;
 		virtual Int GetHeight() const;
 		virtual void Refresh();

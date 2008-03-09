@@ -22,8 +22,8 @@
 #include "Math/Transform.hh"
 #include "Math/Vector.hh"
 
-#include "Scene/Scene.hh"
-#include "Scene/Camera.hh"
+#include "World/Scene.hh"
+#include "World/Camera.hh"
 
 #include "Graphics/Image.hh"
 #include "Graphics/Screen.hh"
@@ -45,10 +45,10 @@ namespace Render {
 	 */
 	class Raytracer : public Renderer {
 		/** Scene to be rendered */
-		const Scene::Scene &Scene;
+		const World::Scene &Scene;
 
 		/** Camera to render with */
-		const Scene::Camera &Camera;
+		const World::Camera &Camera;
 
 		/** Anti-aliasing */
 		const Bool Antialiasing;
@@ -85,8 +85,8 @@ namespace Render {
 			const Math::Vector &Normal,
 			const Ray &Reflect,
 			const Double Shininess,
-			Scene::Color &Diffuse,
-			Scene::Color &Specular);
+			World::Color &Diffuse,
+			World::Color &Specular);
 
 
 		/**
@@ -101,7 +101,7 @@ namespace Render {
 		 * background.
 		 */
 		Bool Trace(const Ray &R,
-			   Scene::Color &C,
+			   World::Color &C,
 			   const Int Depth,
 			   const Double CurIdx);
 
@@ -110,10 +110,10 @@ namespace Render {
 		 * \param Scene   scene to be rendered
 		 * \param Camera  selected camera view
 		 */
-		Raytracer(const Scene::Scene &Scene,
-			  const Scene::Camera &Camera,
+		Raytracer(const World::Scene &Scene,
+			  const World::Camera &Camera,
 			  const Bool Antialiasing = true,
-			  const Double Atmosphere = Scene::MatLib::IdxAir);
+			  const Double Atmosphere = World::MatLib::IdxAir);
 
 		/** Renders scene into Image buffer
 		 * \param Img	Drawable object (Screen or Image)
