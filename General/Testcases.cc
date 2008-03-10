@@ -82,19 +82,18 @@ namespace Testcases {
 			}
 		}
 
-		const Math::Vector V1(0.0, 0.0, 0.0);
-		const Math::Vector V2(0.0, 0.0, 1.0);
+		const Math::Vector Pos(0.0, 0.0, 0.0);
+		const Math::Vector Dir(0.0, 0.0, 1.0);
 
-		World::Scene S;
+		World::Scene S(World::Camera(Pos, Dir));
 		S.AddObject(new World::Sphere(
 				    Math::Vector(0.0, 0.0, 10.0),
 				    1.0)
 			);
 		S.AddLight(new World::PointLight(Math::Vector(0.0, 10.0, 7.0)));
 
-		World::Camera C(V1, V2);
-		Render::Raytracer R(S, C);
-		Render::Ray(V1, V2);
+		Render::Raytracer R(S);
+		Render::Ray(Pos, Dir);
 
 		Graphics::Image Img(4,4);
 		R.Render(Img);

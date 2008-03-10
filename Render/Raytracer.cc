@@ -23,11 +23,10 @@ namespace Render {
 	const Int Raytracer::AASize = 2;
 
 	Raytracer::Raytracer(const World::Scene &Scene,
-			     const World::Camera &Camera,
 			     const Bool Antialiasing,
 			     const Int MaxDepth)
 
-		: Scene(Scene), Camera(Camera),
+		: Scene(Scene),
 		  Antialiasing(Antialiasing),
 		  MaxDepth(MaxDepth),
 		  ShadowRays(0),
@@ -187,7 +186,7 @@ namespace Render {
 		Int Height = Img.GetHeight();
 		const World::Color &Background = Scene.GetBackground();
 		const World::Camera::View V =
-			this->Camera.CreateView(
+			this->Scene.GetCamera().CreateView(
 				Antialiasing ? Int(Width * AASize) : Width,
 				Antialiasing ? Int(Height * AASize) : Height);
 

@@ -17,7 +17,13 @@
 #include "World/Scene.hh"
 
 namespace World {
+
 	Scene::~Scene()
+	{
+		this->Purge();
+	}
+
+	void Scene::Purge()
 	{
 		for (std::vector<Object *>::iterator i = this->Objects.begin();
 		     i != this->Objects.end();

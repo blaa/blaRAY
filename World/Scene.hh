@@ -14,7 +14,11 @@
 #define _SCENE_H_
 
 #include <vector>
+#include <map>
 #include <stdexcept>
+
+#include <libxml/xmlmemory.h>
+#include <libxml/parser.h>
 
 #include "General/Debug.hh"
 #include "Render/Ray.hh"
@@ -29,6 +33,7 @@
 
 #include "World/Light.hh"
 #include "World/Camera.hh"
+
 
 /**
  * \brief
@@ -47,8 +52,8 @@ namespace World {
 	 *	Collision detection and scene management.
 	 *
 	 * This object holds scene structure, allows to check
-	 * collisions with all scene objects and allows iteration 
-	 * of scene lights. Scene frees in it's destructor memory 
+	 * collisions with all scene objects and allows iteration
+	 * of scene lights. Scene frees in it's destructor memory
 	 * allocated for objects in the scene (they must be added
 	 * to the structure with Add* functions.
 	 */
@@ -64,7 +69,7 @@ namespace World {
 		 * \bug rewrite implementation to use octree */
 		std::vector<Object *> Objects;
 
-		/** Lights we iterate during shadowpass. 
+		/** Lights we iterate during shadowpass.
 		 * Freed during scene destruction */
 		std::vector<Light *> Lights;
 
@@ -74,28 +79,54 @@ namespace World {
 		/** Atmosphere refractive index */
 		Double AtmosphereIdx;
 
+		/** Camera used to render the scene */
+		Camera C;
+
+		/*** Facilities for reading XML Files */
+		/*@{ XML Readers */
+		void CreateLibrary();
+
+		Color ParseColor(xmlNodePtr Node);
+		Math::Vector ParseVector(xmlNodePtr Node);
+
+		void ParseTexture(xmlNodePtr Node);
+		void ParseMaterial(xmlNodePtr Node);
+		void ParsePointLight(xmlNodePtr Node);
+		void ParseAmbientLight(xmlNodePtr Node);
+		void ParseSphere(xmlNodePtr Node);
+		void ParsePlane(xmlNodePtr Node);
+		/*@}*/
+
+		std::map<std::string, Color> ColMap;
+		std::map<std::string, Texture *> TexMap;
+		std::map<std::string, Material *> MatMap;
+		typedef std::map<std::string, Color>::iterator ColIter;
+		typedef std::map<std::string, Texture *>::iterator TexIter;
+		typedef std::map<std::string, Material *>::iterator MatIter;
+
 	public:
 		/** Initialize scene management */
-		Scene(const Color &Background = ColLib::Black(),
+		Scene(const Camera &C = Camera(),
+		      const Color &Background = ColLib::Black(),
 		      const Double AtmosphereIdx = MatLib::IdxAir)
 			: Background(Background),
-			  AtmosphereIdx(AtmosphereIdx)
-		{
+			  AtmosphereIdx(AtmosphereIdx),
+			  C(C) {
 			Materials.reserve(20);
 			Objects.reserve(20);
 			Lights.reserve(20);
 			Textures.reserve(20);
 		}
 
-		/**
-		 * Free all added to scene objects
-		 */
+		/** Free memory */
 		~Scene();
 
-		/** Add object to scene. It will be freed by 
+		/** Frees all added to scene objects */
+		void Purge();
+
+		/** Add object to scene. It will be freed by
 		 * scene destructor */
-		inline void AddObject(Object *O)
-		{
+		inline void AddObject(Object *O) {
 			if (DEBUG && O == NULL)
 				throw std::invalid_argument
 					("Argument can't be a NULL pointer");
@@ -104,8 +135,7 @@ namespace World {
 
 		/** Add light to the scene. It will be freed
 		 * by scene destructor */
-		inline void AddLight(Light *L)
-		{
+		inline void AddLight(Light *L) {
 			if (DEBUG && L == NULL)
 				throw std::invalid_argument
 					("Argument can't be a NULL pointer");
@@ -114,8 +144,7 @@ namespace World {
 
 		/** Add material to the scene. It will be freed
 		 * by scene destructor */
-		inline void AddMaterial(Material *M)
-		{
+		inline void AddMaterial(Material *M) {
 			if (DEBUG && M == NULL)
 				throw std::invalid_argument
 					("Argument can't be a NULL pointer");
@@ -124,8 +153,7 @@ namespace World {
 
 		/** Add texture to the scene. It will be freed
 		 * by scene destructor */
-		inline void AddTexture(Texture *T)
-		{
+		inline void AddTexture(Texture *T) {
 			if (DEBUG && T == NULL)
 				throw std::invalid_argument
 					("Argument can't be a NULL pointer");
@@ -138,17 +166,22 @@ namespace World {
 		 */
 		Bool Collide(const Render::Ray &R, Double &RayPos, const Object* &O) const;
 
+		/** Reader */
+		bool ParseFile(std::string File);
 
 		/** Scene background accessor */
-		inline const Color &GetBackground() const
-		{
+		inline const Color &GetBackground() const {
 			return this->Background;
 		}
 
 		/** Scene atmosphere accessor */
-		inline Double GetAtmosphere() const
-		{
+		inline Double GetAtmosphere() const {
 			return this->AtmosphereIdx;
+		}
+
+		/** Scene camera */
+		inline const Camera &GetCamera() const {
+			return this->C;
 		}
 
 		/** \brief Template class for simplified scene iterators */

@@ -2,7 +2,7 @@
 ;; --------------------------------------------------------------------------
 ;; Desktop File for Emacs
 ;; --------------------------------------------------------------------------
-;; Created Sun Mar  9 23:34:42 2008
+;; Created Mon Mar 10 19:44:54 2008
 ;; Desktop file format version 206
 ;; Emacs version 22.1.1
 
@@ -12,9 +12,31 @@
 (setq tags-table-list nil)
 (setq search-ring '("TraceLight" "Shininess" "friend" "double" "Trace" "bool" "double" "Set" "bool" "int" "double" "Square" "Length" "Me_t" "Normalize" "create"))
 (setq regexp-search-ring nil)
-(setq register-alist (list (desktop-list* 113 (let ((mk (make-marker))) (add-hook 'desktop-delay-hook (list 'lambda '() (list 'set-marker mk 472 (get-buffer "Light.hh")))) mk))))
+(setq register-alist (list (desktop-list* 113 (let ((mk (make-marker))) (add-hook 'desktop-delay-hook (list 'lambda '() (list 'set-marker mk 472 (get-buffer "Renderer.hh")))) mk))))
 
 ;; Buffer section -- buffers listed in same order as in buffer list:
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/World/SceneXML.cc"
+  "SceneXML.cc"
+  'c++-mode
+  '(abbrev-mode)
+  2764
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/Tiny/raytracer.ml"
+  "raytracer.ml"
+  'tuareg-mode
+  '(abbrev-mode)
+  13805
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
 (desktop-create-buffer 206
   "/home/bla/my_projects/blaRAY/Render/Renderer.hh"
   "Renderer.hh"
@@ -132,17 +154,6 @@
   '(abbrev-mode)
   864
   '(1 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/Tiny/raytracer.ml"
-  "raytracer.ml"
-  'tuareg-mode
-  '(abbrev-mode)
-  13805
-  '(nil nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))

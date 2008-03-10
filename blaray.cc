@@ -45,7 +45,7 @@ void Render1(Graphics::Screen &Scr)
 	const Math::Vector V1(0.0, 0.0, 0.0);
 	const Math::Vector V2(0.0, 0.0, 1.0);
 
-	Scene::Scene S(ColLib::Black());
+	Scene::Scene S(Camera(V1, V2), ColLib::Black());
 
 	const Texture &Plain = TexLib::Plain(
 		Color(0.2, 0.2, 0.2));
@@ -78,10 +78,9 @@ void Render1(Graphics::Screen &Scr)
 	S.AddLight(new PointLight(Math::Vector(3.0, 10.0, 7.0)));
 	S.AddLight(new AmbientLight(Color(0.05, 0.05, 0.05)));
 
-	Camera C(V1, V2);
-	Render::Raytracer R(S, C, true);
+	Render::Raytracer R(S, true);
 
-	std::cout << "Raytracing with " << C;
+	std::cout << "Raytracing with " << S.GetCamera();
 
 	R.Render(Scr);
 }
@@ -90,7 +89,9 @@ void Render2(Graphics::Screen &Scr)
 {
 	using namespace World;
 
-	Scene::Scene S(ColLib::Black());
+	const Math::Vector Pos(-2.0, 3.0, -2.0);
+	const Math::Vector Dir(0.2, -0.3, 1.0);
+	Scene::Scene S(Camera(Pos, Dir), ColLib::Black());
 
 	TexLib::Checked Checked = TexLib::Checked(
 		ColLib::Black(),
@@ -134,16 +135,19 @@ void Render2(Graphics::Screen &Scr)
 	S.AddLight(new PointLight(Math::Vector(3.0, 10.0, 7.0)));
 	S.AddLight(new AmbientLight(Color(0.05, 0.05, 0.05)));
 
-	const Math::Vector Pos(-2.0, 3.0, -2.0);
-	const Math::Vector Dir(0.2, -0.3, 1.0);
-	const Camera C(Pos, Dir);
-	Render::Raytracer R(S, C, true);
+	Render::Raytracer R(S, true);
 
-	std::cout << "Raytracing with " << C;
+	std::cout << "Raytracing with " << S.GetCamera();
 
 	R.Render(Scr);
 }
 
+void Render3(Graphics::Screen &Scr)
+{
+	using namespace World;
+	Scene S;
+	S.ParseFile("Examples/Scene1.xml");
+}
 
 int main(void)
 {
@@ -155,8 +159,11 @@ int main(void)
 /*	Graphics::Screen Scr(50, 50); */
 
 	gettimeofday(&A, NULL);
-	Render2(Scr);
+
+	Render3(Scr);
+
 	gettimeofday(&B, NULL);
+
 	e_t(double) ATime = A.tv_sec + 0.000001 * A.tv_usec;
 	e_t(double) BTime = B.tv_sec + 0.000001 * B.tv_usec;
 

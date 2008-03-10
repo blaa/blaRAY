@@ -53,6 +53,11 @@ namespace Graphics {
 		 */
 		static int Thread(void *Data);
 
+		/** Private copy-constructor */
+		Screen(const Screen &G);
+
+		/** Private operator= */
+		void operator=(const Screen &G) const;
 	public:
 		/** Construct screen */
 		Screen(const Int Width, const Int Height);

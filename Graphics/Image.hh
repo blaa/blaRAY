@@ -35,6 +35,11 @@ namespace Graphics {
 			return Data[Y * Width + X];
 		}
 
+		/** Private copy-constructor */
+		Image(const Image &G);
+
+		/** Private operator= */
+		void operator=(const Image &G) const;
 	public:
 		/** Construct image */
 		Image(const Int Width, const Int Height);

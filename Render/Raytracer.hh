@@ -47,9 +47,6 @@ namespace Render {
 		/** Scene to be rendered */
 		const World::Scene &Scene;
 
-		/** Camera to render with */
-		const World::Camera &Camera;
-
 		/** Anti-aliasing */
 		const Bool Antialiasing;
 
@@ -114,7 +111,6 @@ namespace Render {
 		 * \param MaxDepth	How much should be recurr
 		 */
 		Raytracer(const World::Scene &Scene,
-			  const World::Camera &Camera,
 			  const Bool Antialiasing = true,
 			  const Int MaxDepth = 5);
 

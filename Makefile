@@ -5,10 +5,10 @@
 # Configuration
 ##
 CC=g++
-CFLAGS=-Wall -O1 -ggdb -I.
+CFLAGS=-Wall -O1 -ggdb -I. `pkg-config --cflags libxml-2.0`
 #CFLAGS=-pipe -Wall -O3 -I. -march=athlon64 -fomit-frame-pointer -mmmx  -msse  -msse2 -msse3 -m3dnow
 CPPFLAGS=$(CFLAGS)
-LDFLAGS=-lSDL
+LDFLAGS=-lSDL `pkg-config --libs libxml-2.0`
 MAKEDEPS=./makedeps
 
 # Source files
@@ -17,7 +17,7 @@ MATH=	Math/Matrix.cc Math/Transform.cc Math/Vector.cc
 SCENE=	World/Object.cc World/Plane.cc World/Color.cc \
 	World/Texture.cc World/Material.cc \
 	World/Sphere.cc World/Light.cc World/Camera.cc \
-	World/Scene.cc 
+	World/Scene.cc World/SceneXML.cc
 RENDER=	Render/Ray.cc Render/Photon.cc Render/Raytracer.cc
 MISC=	General/Testcases.cc
 SOURCES=$(IO) $(MATH) $(SCENE) $(RENDER) $(MISC) blaray.cc

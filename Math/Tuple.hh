@@ -31,10 +31,7 @@ namespace Math {
 	template<typename T, bool DoCropping=false, int Count=3>
 	class Tuple {
 	protected:
-		/** Tuple coordinates (X,Y,Z,W=1)
-		 *
-		 * Fourth coordinate is defined so we can multiply vector
-		 * by a matrix. */
+		/** Tuple coordinates */
 		T D[Count];
 
 		/**@{ Crop tuple into bounds */
@@ -62,7 +59,6 @@ namespace Math {
 			}
 		}
 		/*}@*/
-
 
 		std::string Dump() const {
 			std::stringstream s;

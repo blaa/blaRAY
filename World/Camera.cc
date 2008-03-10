@@ -51,7 +51,7 @@ namespace World {
 	Camera::View Camera::CreateView(Int XRes, Int YRes) const
 	{
 		/* Calculate 'world' dimensions of camera screen */
-		Double Ratio = (double)XRes / YRes;
+		Double Ratio = Double((double)XRes) / Double((double)YRes);
 		Double XWidth = std::tan(this->FOV / 2.0);
 		Double YWidth = XWidth / Ratio;
 

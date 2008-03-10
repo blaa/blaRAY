@@ -33,7 +33,7 @@ namespace World {
 		/** Sphere radius */
 		Double Radius;
 
-		virtual std::string Dump() const;
+       		virtual std::string Dump() const;
 	public:
 		/** Construct sphere object */
 		Sphere(const Math::Vector &Center,
