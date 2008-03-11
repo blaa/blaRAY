@@ -2,9 +2,14 @@ External
 *.swp
 *.o
 *.cc~
+*.xml~
 *.hh~
 \#*\#
 .#*
 *.d
+*.cmi
+*.cmx
 blaray
+blaRAY
+Tiny/raytracer
 Docs

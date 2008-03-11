@@ -232,8 +232,9 @@ static void Help()
 {
 	using namespace std;
 	cout
-	<< "Usage: ./blaRAY --demo" << endl
-	<< "       ./blaRAY [-x width] [-y height] [-a] --file <path>" << endl
+	<< "Usage: ./blaRAY [-x width] [-y height] [-a] --demo 1|2" << endl
+	<< "       ./blaRAY [-x width] [-y height] [-a]"
+			<< " --file <path> --output <path>" << endl
 	<< "List of options:" << endl
 	<< "	--scene|-s <filename>	- Scene description to render" << endl
 	<< "	--demo|-d <num>		- Render demo 1 or 2 instead of a file" << endl
@@ -243,7 +244,8 @@ static void Help()
 	<< "	--antialiasing|-a	- Turn antialiasing on" << endl
 	<< "	--help|-h		- Show this help" << endl
 	<< endl
-	<< "blaRAY (C) 2008 by Tomasz bla Fortuna" << endl;
+	<< "blaRAY (C) 2008 by Tomasz bla Fortuna <bla@thera.be>" << endl
+	<< "License: GPLv3 See Docs/LICENSE" << endl;
 }
 
 int main(int argc, char **argv)
@@ -324,7 +326,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	if (DEBUG)
+/*	if (DEBUG)
 		cout << "Configuration:" << endl
 		     << "Width = " << Configuration.Width << endl
 		     << "Height= " << Configuration.Height << endl
@@ -333,7 +335,7 @@ int main(int argc, char **argv)
 		     << "Demo = " << Configuration.Demo << endl
 		     << "Antialiasing = " << (Configuration.Antialiasing
 					      ? "true" : "false") << endl;
-
+*/
 	if (Configuration.Demo != 0) {
 		Demo(Configuration.Width,
 		     Configuration.Height,
@@ -345,7 +347,8 @@ int main(int argc, char **argv)
 
 	if (Configuration.SceneFile == "") {
 		cout << "ERROR: You must specify scene file to render (or --demo)"
-		     << endl;
+		     << endl << endl;
+		Help();
 		return -1;
 	}
 

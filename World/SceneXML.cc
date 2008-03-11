@@ -47,6 +47,27 @@ namespace World {
 		}
 	};
 
+	static Bool IsDouble(const std::string &str)
+	{
+		Bool WasDot = false;
+		if (str.length() == 0)
+			return false;
+		for (UInt i = 0U;
+		     i != str.length();
+		     i++) {
+			if (str[i] == '-' && i == 0)
+				continue;
+
+			if (str[i] == '.' && WasDot == false) {
+				WasDot = true;
+				continue;
+			}
+			if (str[i] < '0' || str[i] > '9')
+				return false;
+		}
+		return true;
+	}
+
 	/** Helper function retrieving property */
 	static std::string GetProp(xmlNodePtr Node, const char *id)
 	{
@@ -64,6 +85,8 @@ namespace World {
 		if (Prop == "")
 			throw XMLError(Node,
 			"Unable to find numerical tag " + std::string(str));
+		if (!IsDouble(Prop))
+		    throw XMLError(Node, "Invalid numerical value");
 		Double Val = ToDouble(Prop);
 		/* \bug Do some checking! And return exception */
 		return Val;
@@ -83,11 +106,12 @@ namespace World {
 	}
 
 	/** Ensures given tag name is "Color" */
-	static void EnsureColorTag(xmlNodePtr Node)
+	static void EnsureColorTag(xmlNodePtr Node, xmlNodePtr ErrorCtx = NULL)
 	{
 		if (!Node) {
-			throw XMLError(Node,
-				"Expected \"Color\" tag got nothing ");
+			throw XMLError(ErrorCtx,
+				"Expected \"Color\" tag within"
+				" this context got nothing ");
 		}
 
 		if (xmlStrcmp(Node->name, (const xmlChar *) "Color"))
@@ -120,6 +144,28 @@ namespace World {
 			if (IsToken(Node, "comment"))
 				continue;
 			break;
+		}
+	}
+
+	void Scene::DumpLibrary()
+	{
+		using namespace std;
+		cout << "--- Dumping colors: " << endl;
+		for (ColIter i = ColMap.begin();
+		     i != ColMap.end(); i++) {
+			cout << i->first << " == " << i->second << endl;
+		}
+
+		cout << "--- Dumping textures: " << endl;
+		for (TexIter i = TexMap.begin();
+		     i != TexMap.end(); i++) {
+			cout << i->first << " == " << *i->second << endl;
+		}
+
+		cout << "--- Dumping materials: " << endl;
+		for (MatIter i = MatMap.begin();
+		     i != MatMap.end(); i++) {
+			cout << i->first << " == " << *i->second << endl;
 		}
 	}
 
@@ -252,7 +298,7 @@ namespace World {
 		if (Type == "Plain") {
 			xmlNodePtr Child = Node->xmlChildrenNode;
 			OmitComments(Child);
-			EnsureColorTag(Child);
+			EnsureColorTag(Child, Node);
 			Color C = ParseColor(Child);
 
 			Child = Child->next;
@@ -272,13 +318,13 @@ namespace World {
 			xmlNodePtr Child = Node->xmlChildrenNode;
 			OmitComments(Child);
 			/* First color */
-			EnsureColorTag(Child);
+			EnsureColorTag(Child, Node);
 			Color A = ParseColor(Child);
 
 			/* Second color */
 			Child = Child->next;
 			OmitComments(Child);
-			EnsureColorTag(Child);
+			EnsureColorTag(Child, Node);
 			Color B = ParseColor(Child);
 
 			Child = Child->next;
@@ -315,17 +361,21 @@ namespace World {
 
 	Double Scene::ParseIdx(xmlNodePtr Node)
 	{
-		std::string named = GetProp(Node, "named");
-		if (named != "") {
-			IdxIter iter = IdxMap.find(named);
-			if (iter == IdxMap.end())
-				throw XMLError(Node, "No refractive index"
-					       " with that name");
-
-			return iter->second;
-		} else {
-			Double idx = GetDoubleProp(Node, "idx", MatLib::IdxGlass);
+		std::string idx = GetProp(Node, "idx");
+		if (IsDouble(idx)) {
+			Double idx = GetDoubleProp(Node, "idx");
 			return idx;
+		} else {
+			if (idx != "") {
+				IdxIter iter = IdxMap.find(idx);
+				if (iter == IdxMap.end())
+					throw XMLError(Node,
+						       "No refractive index"
+						       " with that name");
+				return iter->second;
+			} else {
+				return MatLib::IdxGlass;
+			}
 		}
 	}
 
@@ -358,10 +408,14 @@ namespace World {
 		if (reflect != "") Reflect = GetTexture(reflect);
 		if (refract != "") Refract = GetTexture(refract);
 
-		if (!Diffuse) throw XMLError("Undefined texture" + diffuse);
-		if (!Specular) throw XMLError("Undefined texture" + diffuse);
-		if (!Reflect) throw XMLError("Undefined texture" + diffuse);
-		if (!Refract) throw XMLError("Undefined texture" + diffuse);
+		if (!Diffuse) throw XMLError(Node, 
+					     "Undefined texture " + diffuse);
+		if (!Specular) throw XMLError(Node,
+					      "Undefined texture " + specular);
+		if (!Reflect) throw XMLError(Node,
+					     "Undefined texture " + reflect);
+		if (!Refract) throw XMLError(Node,
+					     "Undefined texture " + refract);
 
 		/* Everything read, insert to library */
 		Material *Mat = new Material(
@@ -382,12 +436,12 @@ namespace World {
 		if (Type == "Ambient") {
 			xmlNodePtr Cur = Node->xmlChildrenNode;
 			OmitComments(Cur);
-			EnsureColorTag(Cur);
+			EnsureColorTag(Cur, Node);
 			Color C = ParseColor(Cur);
 		        Cur = Cur->next;
 			OmitComments(Cur);
 			if (Cur)
-				throw XMLError(
+				throw XMLError(Node,
 					"Garbage after color declaration");
 			
 			this->AddLight(new AmbientLight(C));			
@@ -408,11 +462,15 @@ namespace World {
 					C = ParseColor(Cur);
 					GotColor = true;
 				} else {
-					throw XMLError(
+					throw XMLError(Cur,
 						"Garbage in pointlight"
 						" declaration");
 				}
 			}
+			if (!GotColor || !GotPosition)
+				throw XMLError(Node,
+					       "Point light requires color"
+					       " and position data");
 			this->AddLight(new PointLight(Pos, C));
 		}
 	}
@@ -488,8 +546,12 @@ namespace World {
 		}
 
 		/* Create camera from read data */
-		this->AddObject(
-			new Sphere(Position, Radius, *Material));
+		Sphere *S = new Sphere(Position, Radius, *Material);
+		if (DEBUG)
+			std::cout
+				<< "Adding sphere " << *S << std::endl;
+		this->AddObject(S);
+
 	}
 
 	void Scene::ParsePlane(xmlNodePtr Node)
@@ -606,13 +668,13 @@ namespace World {
 				throw XMLError("Invalid token in file \""
 					       + ToStr(cur->name) + "\"");
 			}
-
 			xmlFreeDoc(doc);
 			return true;
 		} catch (std::exception &e) {
 			xmlFreeDoc(doc);
 			std::cout << "*** Error while parsing XML file:" << std::endl
 				  << e.what() << std::endl;
+			if (DEBUG) DumpLibrary();
 			return false;
 		}
 

@@ -27,9 +27,11 @@ namespace World {
 		   << "*\tSpecular=" << M.Specular << std::endl
 		   << "*\tReflect=" << M.Reflect << std::endl
 		   << "*\tRefract=" << M.Refract << std::endl
-		   << "*\t" << M.Reflective
+		   << "*\t"
+			/* << M.Reflective
 		   << "/" << M.Refractive
-		   << "/" << M.Absorptive
+		   << "/" << M.Absorptive */
+		   << M.Index 
 		   << "/" << M.Shininess << std::endl;
 		return os;
 	}

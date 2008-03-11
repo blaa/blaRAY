@@ -38,9 +38,12 @@ namespace World {
 	namespace TexLib {
 		std::string Plain::Dump() const
 		{
-			return std::string("[Plain ")
-				+Texture::Dump()
-				+ std::string("]");
+			std::stringstream s;
+			s << "[Plain Color="
+			  << this->C 
+			  << " " << Texture::Dump()
+			  << "]";
+			return s.str();
 		}
 
 		std::string Checked::Dump() const
@@ -70,7 +73,7 @@ namespace World {
 
 		const Texture &Blue()
 		{
-			static Plain T(ColLib::Red());
+			static Plain T(ColLib::Blue());
 			return T;
 		}
 

@@ -86,6 +86,7 @@ namespace World {
 		/*@{ XML Readers */
 		/** Initialize default items library */
 		void CreateLibrary();
+		void DumpLibrary();
 
 		/** Parse color (return it and name it) */
 		Color ParseColor(xmlNodePtr Node);

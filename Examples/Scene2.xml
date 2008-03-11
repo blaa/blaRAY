@@ -1,0 +1,80 @@
+ 
+<Scene>
+  <Background r="1.0" g="0.0" b="0.0" />
+  <Atmosphere idx="Air" />
+
+  <!-- Color definitions -->
+  <Color id="LightGray" r="0.91" g="0.91" b="0.91" />
+  <Color id="DarkGray" r="0.1" g="0.1" b="0.1" />
+
+  <!-- Texture definitions -->
+  <Texture id="Checked" type="Checked">
+    <Color id="Black" />
+    <Color r="0.8" g="0.8" b="0.8" />
+  </Texture>
+
+  <Texture id="Checked2" type="Checked" width="0.2" height="0.2">
+    <Color id="Blue" />
+    <Color id="Red" />
+  </Texture>
+
+  <Texture id="LightGray" type="Plain">
+    <Color id="LightGray" />
+  </Texture>
+
+  <Texture id="DarkGray" type="Plain">
+    <Color id="DarkGray" />
+  </Texture>
+
+  <Texture id="PlaneTexture" type="Plain">
+    <Color r="0.2" g="0.2" b="0.2" />
+  </Texture>
+
+  <!-- Material definitions -->
+  <Material id="Glass"
+	    diffuse="Black" specular="LightGray"
+	    reflect="DarkGray" refract="LightGray"
+	    shininess="15.0" idx="Glass" />
+
+  <Material id="Plane" diffuse="Checked" />
+  <Material id="Checked" diffuse="Checked" specular="LightGray" shininess="6" />
+  <Material id="Checked2" diffuse="Checked2" specular="LightGray" shininess="6" />
+
+  <!-- Scene objects -->
+  <Sphere radius="1.0">
+    <Position x="1.0" y="0.0" z="8.0" />
+    <Material id="Glass" />
+  </Sphere>
+
+  <Sphere radius="1.0">
+    <Position x="0.0" y="0.0" z="10.0" />
+    <Material id="Checked2" />
+  </Sphere>
+
+  <Sphere radius="1.0">
+    <Position x="-1.5" y="0.0" z="8.0" />
+    <Material id="Glass" />
+  </Sphere>
+
+  <Plane distance="-1.0">
+    <Normal x="0.0" y="1.0" z="0.0" />
+    <Material id="Plane" />
+  </Plane>
+
+  <!-- Scene lights -->
+  <Light type="Point">
+    <Position x="3.0" y="10.0" z="7.0" />
+    <Color id="White" />
+  </Light>
+
+  <Light type="Ambient">
+    <Color id="DarkGray" />
+  </Light>
+
+  <!-- Scene Camera -->
+  <Camera FOV="45">
+    <Pos x="-2.0" y="3.0" z="-2.0" />
+    <Dir x="0.2" y="-0.3" z="1.0" />
+    <!-- <Top x="0.2" y="-0.3" z="1.0" /> -->
+  </Camera>
+</Scene>

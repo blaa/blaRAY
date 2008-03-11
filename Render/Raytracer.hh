@@ -35,6 +35,8 @@
  * Namespace constains all classes used for rendering. This includes
  * Ray abstraction, classical raytracer, photon mapper and other
  * helper classes.
+ *
+ * \bug Specular color should be calculated otherwise. Check it.
  */
 namespace Render {
 
