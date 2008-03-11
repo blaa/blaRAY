@@ -110,12 +110,14 @@ namespace Testcases {
 
 		cout << C1 << " " << C2 << endl;
 
-		std::auto_ptr<World::Texture> Tex1(World::TexLib::NewPlain(C1) );
-		std::auto_ptr<World::Texture> Tex2(World::TexLib::NewChecked(C1, C2, 1.0, 2.0, true) );
+/*		std::auto_ptr<World::Texture> Tex1(World::TexLib::NewPlain(C1) );
+		std::auto_ptr<World::Texture> Tex2(World::TexLib::NewChecked(C1, C2, 1.0, 2.0, true) ); */
 		const World::Texture &Tex3 = World::TexLib::Red();
+		const World::Texture &Tex1 = World::TexLib::Red();
+		const World::Texture &Tex2 = World::TexLib::Blue();
 
-		cout << *Tex1 << endl
-		     << *Tex2 << endl
+		cout << Tex1 << endl
+		     << Tex2 << endl
 		     << Tex3 << endl;
 
 		/* Primitives and collisions */

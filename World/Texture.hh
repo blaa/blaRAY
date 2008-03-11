@@ -72,7 +72,7 @@ namespace World {
 	 *
 	 * Handles nice, functional-like, creation of basic textures.
 	 */
-        namespace TexLib {
+	namespace TexLib {
 		/** \brief Plain texture class */
 		class Plain : public Texture {
 		protected:
@@ -125,17 +125,6 @@ namespace World {
 			}
 		};
 
-		/** \brief Plain texture - whole in one color */
-		/** Create plain texture */
-		Texture *NewPlain(const Color &C);
-
-		/** Create checked texture */
-		Texture *NewChecked(const Color &A,
-				    const Color &B,
-				    const Double SizeU = 1.0,
-				    const Double SizeV = 1.0,
-				    const Bool Tiled = true);
-
 		/**@{ Static plain texture */
 		const Texture &Red();
 		const Texture &Green();
@@ -144,7 +133,6 @@ namespace World {
 		const Texture &Black();
 		const Texture &Gray();
 		/*@}*/
-
 
 	};
 }

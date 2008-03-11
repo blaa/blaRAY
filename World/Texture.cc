@@ -14,6 +14,7 @@
 #include <string>
 #include <sstream>
 
+#include "World/Color.hh"
 #include "World/Texture.hh"
 
 namespace World {
@@ -36,11 +37,12 @@ namespace World {
 	}
 
 	namespace TexLib {
+
 		std::string Plain::Dump() const
 		{
 			std::stringstream s;
 			s << "[Plain Color="
-			  << this->C 
+			  << this->C
 			  << " " << Texture::Dump()
 			  << "]";
 			return s.str();
@@ -52,57 +54,41 @@ namespace World {
 				+Texture::Dump()
 				+ std::string("]");
 		}
-
-		/* Factory functions */
-		Texture *NewPlain(const Color &C)
-		{
-			return new Plain(C);
-		}
-
 		const Texture &Red()
 		{
-			static Plain T(ColLib::Red());
-			return T;
+			static const Plain Tex(ColLib::Red());
+			return Tex;
 		}
 
 		const Texture &Green()
 		{
-			static Plain T(ColLib::Green());
+			static const Plain T(ColLib::Green());
 			return T;
 		}
 
 		const Texture &Blue()
 		{
-			static Plain T(ColLib::Blue());
+			static const Plain T(ColLib::Blue());
 			return T;
 		}
 
 		const Texture &White()
 		{
-			static Plain T(ColLib::White());
+			static const Plain T(ColLib::White());
 			return T;
 		}
 
 		const Texture &Black()
 		{
-			static Plain T(ColLib::Black());
+			static const Plain T(ColLib::Black());
 			return T;
 		}
 
 		const Texture &Gray()
 		{
-			static Plain T(ColLib::Gray());
+			static const Plain T(ColLib::Gray());
 			return T;
 		}
-
-
-		Texture *NewChecked(const Color &A, const Color &B,
-				    const Double SizeU,
-				    const Double SizeV,
-				    const Bool Tiled)
-		{
-			return new Checked(A, B, SizeU, SizeV, Tiled);
-		}
-	}
+       }
 
 };

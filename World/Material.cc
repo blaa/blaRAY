@@ -31,56 +31,58 @@ namespace World {
 			/* << M.Reflective
 		   << "/" << M.Refractive
 		   << "/" << M.Absorptive */
-		   << M.Index 
+		   << M.Index
 		   << "/" << M.Shininess << std::endl;
 		return os;
 	}
 
-	const Material &MatLib::Red()
-	{
-		static Material M(TexLib::Red());
-		return M;
-	}
+	namespace MatLib {
+		const Material &Red()
+		{
+			static Material M(World::TexLib::Red());
+			return M;
+		}
 
-	const Material &MatLib::Green()
-	{
-		static Material M(TexLib::Green());
-		return M;
-	}
+		const Material &Green()
+		{
+			static Material M(TexLib::Green());
+			return M;
+		}
 
-	const Material &MatLib::Blue()
-	{
-		static Material M(TexLib::Blue());
-		return M;
-	}
+		const Material &Blue()
+		{
+			static Material M(TexLib::Blue());
+			return M;
+		}
 
-	const Material &MatLib::White()
-	{
-		static Material M(TexLib::White());
-		return M;
-	}
+		const Material &White()
+		{
+			static Material M(TexLib::White());
+			return M;
+		}
 
-	const Material &MatLib::Black()
-	{
-		static Material M(TexLib::Black());
-		return M;
-	}
+		const Material &Black()
+		{
+			static Material M(TexLib::Black());
+			return M;
+		}
 
-	const Material &MatLib::Gray()
-	{
-		static Material M(TexLib::Gray());
-		return M;
-	}
+		const Material &Gray()
+		{
+			static Material M(TexLib::Gray());
+			return M;
+		}
 
-	const Material &MatLib::Glass()
-	{
-		static const TexLib::Plain Diff = TexLib::Plain(Color(0.0, 0.0, 0.2));
-		static const TexLib::Plain Spec = TexLib::Plain(Color(0.8, 0.8, 0.8));
-		static const TexLib::Plain Refr = TexLib::Plain(Color(0.8, 0.8, 0.8));
-		static const TexLib::Plain Refl = TexLib::Plain(Color(0.1, 0.1, 0.1));
+		const Material &Glass()
+		{
+			static const TexLib::Plain Diff = TexLib::Plain(Color(0.0, 0.0, 0.2));
+			static const TexLib::Plain Spec = TexLib::Plain(Color(0.8, 0.8, 0.8));
+			static const TexLib::Plain Refr = TexLib::Plain(Color(0.8, 0.8, 0.8));
+			static const TexLib::Plain Refl = TexLib::Plain(Color(0.1, 0.1, 0.1));
 
-		static Material M(Diff, Spec, Refr, Refl,
-				  0.9, 0.9, 1.0, 7.8, IdxGlass);
-		return M;
+			static Material M(Diff, Spec, Refr, Refl,
+					  0.9, 0.9, 1.0, 7.8, IdxGlass);
+			return M;
+		}
 	}
 };

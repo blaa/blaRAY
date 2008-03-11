@@ -122,7 +122,7 @@ namespace World {
 		const Double IdxIce = 1.31;
 		const Double IdxGlass = 1.60;
 		/*@}*/
-			
+
 
 		/**@{ Default, one-color, non-reflective material */
 		const Material &Red();
