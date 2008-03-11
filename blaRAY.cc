@@ -50,7 +50,8 @@
  * Good job would do a profiler.
  */
 
-void Render1(Graphics::Screen &Scr)
+/** Demo function */
+static void Render1(Graphics::Screen &Scr, Bool Antialiasing)
 {
 	using namespace World;
 	const Math::Vector V1(0.0, 0.0, 0.0);
@@ -89,14 +90,15 @@ void Render1(Graphics::Screen &Scr)
 	S.AddLight(new PointLight(Math::Vector(3.0, 10.0, 7.0)));
 	S.AddLight(new AmbientLight(Color(0.05, 0.05, 0.05)));
 
-	Render::Raytracer R(S, true);
+	Render::Raytracer R(S, Antialiasing);
 
 	std::cout << "Raytracing with " << S.GetCamera();
 
 	R.Render(Scr);
 }
 
-void Render2(Graphics::Screen &Scr)
+/** Second demo function */
+static void Render2(Graphics::Screen &Scr, Bool Antialiasing)
 {
 	using namespace World;
 
@@ -146,27 +148,86 @@ void Render2(Graphics::Screen &Scr)
 	S.AddLight(new PointLight(Math::Vector(3.0, 10.0, 7.0)));
 	S.AddLight(new AmbientLight(Color(0.05, 0.05, 0.05)));
 
-	Render::Raytracer R(S, true);
+	Render::Raytracer R(S, Antialiasing);
 
 	std::cout << "Raytracing with " << S.GetCamera();
 
 	R.Render(Scr);
 }
 
-void Render3(Graphics::Screen &Scr)
+/** Render scene described in XML file */
+static void RenderFile(Int Width, Int Height, 
+		       Bool Antialiasing,
+		       const std::string &SceneFile,
+		       const std::string &OutputFile)
 {
 	using namespace World;
+	struct timeval A, B;
 	Scene S;
-	if (S.ParseFile("Examples/Scene1.xml") == false)
-		throw 42;
-	Render::Raytracer R(S, true);
+	if (S.ParseFile(SceneFile) == false) {
+		std::cout 
+			<< "Error while parsing file, finishing" 
+			<< std::endl;
+		return;
+	}
+
+	Graphics::Screen Scr(Width, Height);
+	Render::Raytracer R(S, Antialiasing);
+
+	gettimeofday(&A, NULL);
 	R.Render(Scr);
+	gettimeofday(&B, NULL);
+
+	Double ATime = A.tv_sec + 0.000001 * A.tv_usec;
+	Double BTime = B.tv_sec + 0.000001 * B.tv_usec;
+
+	std::cout << "*** Rendering took "
+		  << BTime - ATime
+		  << " seconds" << std::endl;
+
+	Scr.Refresh();
+	if (OutputFile != "")
+		Scr.Save(OutputFile);
+	Scr.EventWait();
+
 }
 
-static void Demo()
+/** Handle demo selection */
+static void Demo(Int Width, Int Height,
+		 Bool Antialiasing, Int Which, const std::string &Output)
 {
+	std::cout << "*** Rendering demo " << Which << std::endl;
+	/* Render something */
+	Graphics::Screen Scr(Width, Height);
+
+	struct timeval A, B;
+	gettimeofday(&A, NULL);
+	switch ((const int)Which) {
+	case 1:	Render1(Scr, Antialiasing);
+		break;
+	case 2:	Render2(Scr, Antialiasing);
+		break;
+	default:
+		std::cout << "Wrong demo specified. "
+			  << "Possible values: 1, 2" << std::endl;
+		return;
+	}
+	gettimeofday(&B, NULL);
+
+	Double ATime = A.tv_sec + 0.000001 * A.tv_usec;
+	Double BTime = B.tv_sec + 0.000001 * B.tv_usec;
+
+	std::cout << "*** Rendering took "
+		  << BTime - ATime
+		  << " seconds" << std::endl;
+
+	Scr.Refresh();
+	if (Output != "")
+		Scr.Save(Output);
+	Scr.EventWait();
 }
 
+/** Prints help message */
 static void Help()
 {
 	using namespace std;
@@ -175,7 +236,8 @@ static void Help()
 	<< "       ./blaRAY [-x width] [-y height] [-a] --file <path>" << endl
 	<< "List of options:" << endl
 	<< "	--scene|-s <filename>	- Scene description to render" << endl
-	<< "	--demo			- Render demo scene instead of file" << endl
+	<< "	--demo|-d <num>		- Render demo 1 or 2 instead of a file" << endl
+	<< "	--output|-o <filename>	- Output rendered scene to filename (BMP)" << endl
 	<< "	--width|-x <arg>	- sets screen width (default:640)" << endl
 	<< "	--height|-y <arg>	- sets screen height (default:480)" << endl
 	<< "	--antialiasing|-a	- Turn antialiasing on" << endl
@@ -187,29 +249,32 @@ static void Help()
 int main(int argc, char **argv)
 {
 	using namespace std;
-	enum { WIDTH=0, HEIGHT, SCENE, ANTIALIASING, DEMO, HELP };
+	enum { WIDTH=0, HEIGHT, SCENE, OUTPUT, ANTIALIASING, DEMO, HELP };
 	static struct {
 		Int Width;
 		Int Height;
-		std::string Filename;
+		std::string SceneFile;
+		std::string OutputFile;
 		Bool Antialiasing;
+		Int Demo;
 	} Configuration = {
-		640, 480, "", false
+		640, 480, "", "", false, 0
 	};
 
 	static struct option long_options[] = {
 		{"width", 1, 0, 0},
 		{"height", 1, 0, 0},
 		{"scene", 1, 0, 0},
+		{"output", 1, 0, 0},
 		{"antialiasing", 0, 0, 0},
-		{"demo", 0, 0, 0},
+		{"demo", 1, 0, 0},
 		{"help", 0, 0, 0},
 		{NULL, 0, 0, 0}
 	};
 
 	for (;;) {
 		int c, index;
-		c = getopt_long(argc, argv, "x:y:s:adh",
+		c = getopt_long(argc, argv, "x:y:s:o:ad:h",
 				long_options, &index);
 		if (c == -1)
 			break; /* End of parameters */
@@ -221,6 +286,7 @@ int main(int argc, char **argv)
 		case 'x': index = WIDTH; break;
 		case 'y': index = HEIGHT; break;
 		case 's': index = SCENE; break;
+		case 'o': index = OUTPUT; break;
 		case 'a': index = ANTIALIASING; break;
 		case 'd': index = DEMO; break;
 		case 'h': index = HELP; break;
@@ -238,56 +304,59 @@ int main(int argc, char **argv)
 			s >> Configuration.Height;
 			break;
 		case SCENE:
-			s >> Configuration.Filename;
+			s >> Configuration.SceneFile;
 			break;
+		case OUTPUT:
+			s >> Configuration.OutputFile;
+			break;
+
 		case ANTIALIASING:
 			Configuration.Antialiasing = true;
 			break;
 
 		case DEMO:
-			Demo();
+			s >> Configuration.Demo;
 			break;
 
 		case HELP:
 			Help();
-			return 0;
+			return -1;
 		}
 	}
 
-	cout << "Configuration:" << endl
-	     << "Width = " << Configuration.Width << endl
-	     << "Height= " << Configuration.Height << endl
-	     << "SceneFile = " << Configuration.Filename << endl
-	     << "Antialiasing = " << (Configuration.Antialiasing
-				      ? "true" : "false") << endl;
+	if (DEBUG)
+		cout << "Configuration:" << endl
+		     << "Width = " << Configuration.Width << endl
+		     << "Height= " << Configuration.Height << endl
+		     << "SceneFile = " << Configuration.SceneFile << endl
+		     << "OutputFile = " << Configuration.OutputFile << endl
+		     << "Demo = " << Configuration.Demo << endl
+		     << "Antialiasing = " << (Configuration.Antialiasing
+					      ? "true" : "false") << endl;
 
-	return 0;
+	if (Configuration.Demo != 0) {
+		Demo(Configuration.Width,
+		     Configuration.Height,
+		     Configuration.Antialiasing,
+		     Configuration.Demo,
+		     Configuration.OutputFile);
+		return 0;
+	}
 
+	if (Configuration.SceneFile == "") {
+		cout << "ERROR: You must specify scene file to render (or --demo)"
+		     << endl;
+		return -1;
+	}
 
-	struct timeval A, B;
 	if (DEBUG)
 		Testcases::All();
 
 	/* Render something */
-	Graphics::Screen Scr(640, 480);
-/*	Graphics::Screen Scr(50, 50); */
-
-	gettimeofday(&A, NULL);
-
-	Render3(Scr);
-
-	gettimeofday(&B, NULL);
-
-	e_t(double) ATime = A.tv_sec + 0.000001 * A.tv_usec;
-	e_t(double) BTime = B.tv_sec + 0.000001 * B.tv_usec;
-
-	std::cout << "*** Rendering took "
-		  << BTime - ATime
-		  << " seconds" << std::endl;
-
-	Scr.Refresh();
-	Scr.Save("Last.bmp");
-	Scr.EventWait();
-
+	RenderFile(Configuration.Width,
+		   Configuration.Height,
+		   Configuration.Antialiasing,
+		   Configuration.SceneFile,
+		   Configuration.OutputFile);
 	return 0;
 }

@@ -2,7 +2,7 @@
 ;; --------------------------------------------------------------------------
 ;; Desktop File for Emacs
 ;; --------------------------------------------------------------------------
-;; Created Mon Mar 10 19:44:54 2008
+;; Created Tue Mar 11 09:17:34 2008
 ;; Desktop file format version 206
 ;; Emacs version 22.1.1
 
@@ -10,18 +10,95 @@
 (setq desktop-missing-file-warning nil)
 (setq tags-file-name nil)
 (setq tags-table-list nil)
-(setq search-ring '("TraceLight" "Shininess" "friend" "double" "Trace" "bool" "double" "Set" "bool" "int" "double" "Square" "Length" "Me_t" "Normalize" "create"))
+(setq search-ring '("Parsing color" "GetMaterial" "Adding " "doing" "e_" "OmitComme" "Ensure" "OmitCom" "OmitCommenc" "is" "Camera" "Ensure" "IdxGlass" "Increment" "Inapp" "->next"))
 (setq regexp-search-ring nil)
 (setq register-alist (list (desktop-list* 113 (let ((mk (make-marker))) (add-hook 'desktop-delay-hook (list 'lambda '() (list 'set-marker mk 472 (get-buffer "Renderer.hh")))) mk))))
 
 ;; Buffer section -- buffers listed in same order as in buffer list:
 (desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/blaRAY.cc"
+  "blaRAY.cc"
+  'c++-mode
+  '(abbrev-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/World/Light.cc"
+  "Light.cc"
+  'c++-mode
+  '(abbrev-mode)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
   "/home/bla/my_projects/blaRAY/World/SceneXML.cc"
   "SceneXML.cc"
   'c++-mode
   '(abbrev-mode)
-  2764
+  1151
+  '(13691 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/World/Plane.hh"
+  "Plane.hh"
+  'c++-mode
+  '(overwrite-mode abbrev-mode)
+  859
+  '(721 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . iso-8859-2) (overwrite-mode . overwrite-mode-textual)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/World/Camera.hh"
+  "Camera.hh"
+  'c++-mode
+  '(abbrev-mode)
+  1597
+  '(3156 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/World/Scene.hh"
+  "Scene.hh"
+  'c++-mode
+  '(abbrev-mode)
+  2939
+  '(3069 nil)
+  nil
+  nil
+  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
+
+(desktop-create-buffer 206
+  "/usr/lib/gcc/x86_64-pc-linux-gnu/4.2.3/include/g++-v4/bits/stl_pair.h"
+  "stl_pair.h"
+  'c++-mode
+  '(abbrev-mode)
+  3747
   '(nil nil)
+  t
+  nil
+  '((buffer-file-coding-system . undecided-unix)))
+
+(desktop-create-buffer 206
+  "/home/bla/my_projects/blaRAY/World/Texture.hh"
+  "Texture.hh"
+  'c++-mode
+  '(abbrev-mode)
+  2419
+  '(1623 nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
@@ -324,28 +401,6 @@
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/blaray.cc"
-  "blaray.cc"
-  'c++-mode
-  '(abbrev-mode)
-  2040
-  '(1615 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/World/Light.cc"
-  "Light.cc"
-  'c++-mode
-  '(abbrev-mode)
-  1
-  '(nil nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
   nil
   "Render"
   'dired-mode
@@ -423,17 +478,6 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/World/Camera.hh"
-  "Camera.hh"
-  'c++-mode
-  '(abbrev-mode)
-  3192
-  '(3168 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
   "/home/bla/my_projects/blaRAY/World/Camera.cc"
   "Camera.cc"
   'c++-mode
@@ -451,17 +495,6 @@
   '(abbrev-mode)
   2008
   '(2370 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
-
-(desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/World/Scene.hh"
-  "Scene.hh"
-  'c++-mode
-  '(abbrev-mode)
-  3488
-  '(3656 nil)
   nil
   nil
   '((buffer-file-coding-system . undecided-unix) (overwrite-mode)))
@@ -511,17 +544,6 @@
   '((buffer-file-coding-system . undecided-unix)))
 
 (desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/World/Texture.hh"
-  "Texture.hh"
-  'c++-mode
-  '(abbrev-mode)
-  1647
-  '(1623 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
   "/home/bla/my_projects/blaRAY/General/Testcases.cc"
   "Testcases.cc"
   'c++-mode
@@ -553,17 +575,6 @@
   nil
   nil
   '((buffer-file-coding-system . undecided-unix)))
-
-(desktop-create-buffer 206
-  "/home/bla/my_projects/blaRAY/World/Plane.hh"
-  "Plane.hh"
-  'c++-mode
-  '(overwrite-mode abbrev-mode)
-  721
-  '(1 nil)
-  nil
-  nil
-  '((buffer-file-coding-system . iso-8859-2) (overwrite-mode . overwrite-mode-textual)))
 
 (desktop-create-buffer 206
   "/home/bla/my_projects/blaRAY/Graphics/Image.cc"
