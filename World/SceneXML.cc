@@ -303,7 +303,9 @@ namespace World {
 			throw XMLError(Node,
 				       "No identified given for texture");
 
-		/** \bug Check if texture doesn't exist */
+		if (GetTexture(id) != NULL)
+			throw XMLError(Node,
+				       "Texture with this ID already exists");
 
 		if (Type == "Plain") {
 			xmlNodePtr Child = Node->xmlChildrenNode;
@@ -675,7 +677,6 @@ namespace World {
 					DumpLibrary();
 					continue;
 				}
-
 
 				throw XMLError("Invalid token in file \""
 					       + ToStr(cur->name) + "\"");

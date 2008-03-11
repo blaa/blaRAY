@@ -3,7 +3,7 @@
  * (C) 2008 by Tomasz bla Fortuna <bla@thera.be>, <bla@af.gliwice.pl>
  *
  * This program is free software: you can redistribute it and/or modify
-d*sa  under the terms of the GNU General Public License as published by
+ * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * any later version.
  *
@@ -98,9 +98,6 @@ namespace Graphics {
 		if (VALGRIND) return;
 
 		SDL_Event Event;
-		/**
-		 * \bug Check if such loop isn't CPU intensive
-		 */
 		while (1) {
 			if (SDL_PollEvent(&Event)) {
 				switch (Event.type) {

@@ -53,7 +53,8 @@ namespace World {
 		virtual Bool Collide(const Render::Ray &R, Double &RayPos) const;
 		virtual Math::Vector NormalAt(const Math::Vector &Point) const;
 
-		/** \bug Won't work on not horizontal plane. */
+		/** \bug Current implementation will only work for 
+		 * horizontal plane */
 		virtual Math::Point UVAt(const Math::Vector &Point) const;
 	};
 }

@@ -7,4 +7,4 @@ raytracer: raytracer.ml
 	ocamlopt -dtypes -o raytracer -I +site-packages/sdl $(LIBS) raytracer.ml
 
 clean:
-	rm raytracer *.o *.cmo *.cmx
+	rm raytracer *.o *.cmo *.cmx *.cmi

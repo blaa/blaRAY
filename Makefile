@@ -6,7 +6,7 @@
 ##
 CC=g++
 CFLAGS=-Wall -O1 -ggdb -I. `pkg-config --cflags libxml-2.0`
-#CFLAGS=-pipe -Wall -O3 -I. -march=athlon64 -fomit-frame-pointer -mmmx  -msse  -msse2 -msse3 -m3dnow
+#CFLAGS=-pipe -Wall -O3 -I. `pkg-config --cflags libxml-2.0` -march=athlon64 -fomit-frame-pointer -mmmx  -msse  -msse2 -msse3 -m3dnow
 CPPFLAGS=$(CFLAGS)
 LDFLAGS=-lSDL `pkg-config --libs libxml-2.0`
 MAKEDEPS=./makedeps
@@ -78,5 +78,5 @@ docclean:
 	rm -rf Docs/html Docs/latex
 
 distclean: clean docclean
-	rm -f blaray $(DEPS) tags
+	rm -f blaRAY blaray $(DEPS) tags
 

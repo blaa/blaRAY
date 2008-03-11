@@ -30,13 +30,6 @@ namespace World {
 	 * manipulations like mixing colors, filtering (adding,
 	 * multiplying).
 	 *
-	 * \bug
-	 *	Make it more vector like; instead of R,G,B use C[3]
-	 *	with some enum.
-	 *
-	 * \bug It should possibly be moved to Graphics namespace as
-	 *	it's more general.
-	 *
 	 */
 	class Color : public Math::Tuple<Double, true, 3> {
 	public:
