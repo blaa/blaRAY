@@ -281,8 +281,6 @@ int main(int argc, char **argv)
 		if (c == -1)
 			break; /* End of parameters */
 
-		cout << (int)c << " == option" << " index:" << index << endl;
-
 		switch (c) {
 		case 0: break;
 		case 'x': index = WIDTH; break;
@@ -326,16 +324,6 @@ int main(int argc, char **argv)
 		}
 	}
 
-/*	if (DEBUG)
-		cout << "Configuration:" << endl
-		     << "Width = " << Configuration.Width << endl
-		     << "Height= " << Configuration.Height << endl
-		     << "SceneFile = " << Configuration.SceneFile << endl
-		     << "OutputFile = " << Configuration.OutputFile << endl
-		     << "Demo = " << Configuration.Demo << endl
-		     << "Antialiasing = " << (Configuration.Antialiasing
-					      ? "true" : "false") << endl;
-*/
 	if (Configuration.Demo != 0) {
 		Demo(Configuration.Width,
 		     Configuration.Height,

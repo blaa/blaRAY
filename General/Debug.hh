@@ -13,8 +13,8 @@
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
 
-#define DEBUG
-// #define VALGRIND
+//#define DEBUG
+//#define VALGRIND
 
 #ifdef DEBUG
 #	undef DEBUG

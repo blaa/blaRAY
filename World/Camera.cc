@@ -62,7 +62,7 @@ namespace World {
 		/* Calculate X and Y movement vector */
 		Math::Vector XVect = Top.Cross(Dir).Normalize() * XDist;
 		Math::Vector YVect = Top * YDist;
-		std::cout << Top << std::endl;
+
 		if (DEBUG)
 			std::cout << "CreateView: " << std::endl
 				  << "\tworld dimensions: "

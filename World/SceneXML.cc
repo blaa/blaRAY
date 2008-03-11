@@ -490,8 +490,8 @@ namespace World {
 		Bool
 			GotPos = false,
 			GotDir = false,
-			GotTop = false,
-			GotFOV = false;
+			GotTop = false;
+
 		Math::Vector
 			Pos(0.0, 0.0, 0.0),
 			Dir(0.0, 0.0, 1.0),
@@ -625,11 +625,6 @@ namespace World {
 			OmitComments(cur);
 			for (; cur != NULL;
 			     cur = cur->next, OmitComments(cur)) {
-				if (DEBUG)
-					std::cout << "Reading "
-						  << cur->name
-						  << std::endl;
-
 				if (IsToken(cur, "Background")) {
 					this->Background = ParseColor(cur);
 					continue;
