@@ -108,7 +108,6 @@ namespace Render {
 	public:
 		/** Initialize renderer
 		 * \param Scene   scene to be rendered
-		 * \param Camera  selected camera view
 		 * \param Antialiasing	Is antialiasing enabled?
 		 * \param MaxDepth	How much should be recurr
 		 */

@@ -84,8 +84,11 @@ namespace World {
 
 		/*** Facilities for reading XML Files */
 		/*@{ XML Readers */
-		/** Initialize default items library */
+
+		/** Create basic library of color, texture, indices names */
 		void CreateLibrary();
+		
+		/** Debug function. Dumps currently used id library */
 		void DumpLibrary();
 
 		/** Parse color (return it and name it) */

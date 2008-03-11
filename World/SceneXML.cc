@@ -16,13 +16,15 @@
 #include "World/Scene.hh"
 
 namespace World {
+	/** Convert any type to string (debug function )*/
 	template<typename T>
-	std::string ToStr(const T &var) {
+	static std::string ToStr(const T &var) {
 		std::ostringstream tmp;
 		tmp << var;
 		return tmp.str();
 	}
 
+	/** Convert string to double without checking syntax */
 	static Double ToDouble(const std::string &str)
 	{
 		std::stringstream os(str);
@@ -32,8 +34,10 @@ namespace World {
 		return a;
 	}
 
+	/** \brief Exception internal to XML reader */
 	class XMLError : public std::runtime_error {
 	public:
+		/** Create exception with file context */
 		XMLError(xmlNodePtr Node, const std::string &Desc)
 			: std::runtime_error(
 				"On line " + ToStr(xmlGetLineNo(Node)) +
@@ -41,12 +45,15 @@ namespace World {
 		{
 		}
 
+		/** Create exception without file context */
 		XMLError(const std::string &Desc)
 			: std::runtime_error(Desc)
 		{
 		}
 	};
 
+	/** Check numerical value syntax
+	 * \bug Very c-ish code */
 	static Bool IsDouble(const std::string &str)
 	{
 		Bool WasDot = false;
@@ -79,6 +86,7 @@ namespace World {
 		return t;
 	}
 
+	/** Read compulsory numerical property and convert to double */
 	static Double GetDoubleProp(xmlNodePtr Node, const char *str)
 	{
 		std::string Prop = GetProp(Node, str);
@@ -92,6 +100,8 @@ namespace World {
 		return Val;
 	}
 
+	/** Read optional numerical property and convert to double
+	 * if property is not given use the given default value */
 	static Double GetDoubleProp(xmlNodePtr Node,
 				    const char *str,
 				    Double DefaultValue)
@@ -120,6 +130,9 @@ namespace World {
 				std::string((char *)Node->name));
 	}
 
+	/** Read compulsory ID 
+	 * \bug rarely used! 
+	 */
 	static std::string GetID(xmlNodePtr Node)
 	{
 		std::string id = GetProp(Node, "id");
@@ -169,7 +182,6 @@ namespace World {
 		}
 	}
 
-	/** Create basic library of color, texture, indices names */
 	void Scene::CreateLibrary()
 	{
 		using namespace std;
@@ -262,7 +274,6 @@ namespace World {
 		return Math::Vector(X, Y, Z);
 	}
 
-	/** Look up specified texture */
 	const Texture *Scene::GetTexture(const std::string &id)
 	{
 		TexIter iter = TexMap.find(id);
@@ -271,7 +282,6 @@ namespace World {
 		return NULL;
 	}
 
-	/** Look up specified material */
 	const Material *Scene::GetMaterial(const std::string &id)
 	{
 		MatIter iter = MatMap.find(id);
@@ -379,13 +389,12 @@ namespace World {
 		}
 	}
 
-	/** Parse material and add it to database */
 	void Scene::ParseMaterial(xmlNodePtr Node)
 	{
 		std::string id = GetProp(Node, "id");
 		if (id == "")
 			throw XMLError("Material identifier not specified");
-		if (GetMaterial(id) != NULL) 
+		if (GetMaterial(id) != NULL)
 			throw XMLError("Material already defined");
 
 		/* Material parameters with default values */
@@ -408,7 +417,7 @@ namespace World {
 		if (reflect != "") Reflect = GetTexture(reflect);
 		if (refract != "") Refract = GetTexture(refract);
 
-		if (!Diffuse) throw XMLError(Node, 
+		if (!Diffuse) throw XMLError(Node,
 					     "Undefined texture " + diffuse);
 		if (!Specular) throw XMLError(Node,
 					      "Undefined texture " + specular);
@@ -421,7 +430,7 @@ namespace World {
 		Material *Mat = new Material(
 			*Diffuse, *Specular,
 			*Refract, *Reflect,
-			0.0, 0.0, 0.0, 
+			0.0, 0.0, 0.0,
 			Shininess, Idx);
 
 		MatMap.insert( make_pair(id, Mat) );
@@ -438,13 +447,13 @@ namespace World {
 			OmitComments(Cur);
 			EnsureColorTag(Cur, Node);
 			Color C = ParseColor(Cur);
-		        Cur = Cur->next;
+			Cur = Cur->next;
 			OmitComments(Cur);
 			if (Cur)
 				throw XMLError(Node,
 					"Garbage after color declaration");
-			
-			this->AddLight(new AmbientLight(C));			
+
+			this->AddLight(new AmbientLight(C));
 		} else if (Type == "Point") {
 			xmlNodePtr Cur = Node->xmlChildrenNode;
 			Bool GotColor = false;
@@ -457,7 +466,7 @@ namespace World {
 				if (!GotPosition && IsToken(Cur, "Position")) {
 					Pos = ParseVector(Cur);
 					GotPosition = true;
-				} 
+				}
 				else if (!GotColor && IsToken(Cur, "Color")) {
 					C = ParseColor(Cur);
 					GotColor = true;
@@ -478,17 +487,17 @@ namespace World {
 	void Scene::ParseCamera(xmlNodePtr Node)
 	{
 		xmlNodePtr Cur = Node->xmlChildrenNode;
-		Bool 
+		Bool
 			GotPos = false,
 			GotDir = false,
 			GotTop = false,
 			GotFOV = false;
 		Math::Vector
 			Pos(0.0, 0.0, 0.0),
-			Dir(0.0, 0.0, 1.0), 
+			Dir(0.0, 0.0, 1.0),
 			Top(0.0, 1.0, 0.0);
 		Double FOV = GetDoubleProp(Node, "FOV", 45.0);
-	
+
 		OmitComments(Cur);
 		for (; Cur != NULL; Cur = Cur->next, OmitComments(Cur)) {
 			if (!GotPos && IsToken(Cur, "Pos")) {
@@ -509,7 +518,7 @@ namespace World {
 		}
 
 		/* Create camera from read data */
-		this->C = Camera(Pos, 
+		this->C = Camera(Pos,
 				 Dir,
 				 Camera::DegreeToFOV(FOV),
 				 !GotTop,
@@ -525,7 +534,7 @@ namespace World {
 		const Material *Material = &MatLib::Gray();;
 		Math::Vector Position(0.0, 0.0, 0.0);
 		Double Radius = GetDoubleProp(Node, "radius");
-			
+
 		OmitComments(Cur);
 		for (; Cur != NULL; Cur = Cur->next, OmitComments(Cur)) {
 			if (!GotPosition && IsToken(Cur, "Position")) {
@@ -535,8 +544,8 @@ namespace World {
 			if (!GotMaterial && IsToken(Cur, "Material")) {
 				std::string id = GetProp(Cur, "id");
 				Material = GetMaterial(id);
-				if (!Material) 
-					throw XMLError(Cur, 
+				if (!Material)
+					throw XMLError(Cur,
 						"Material doesn't exist");
 				GotMaterial = true;
 			} else
@@ -562,7 +571,7 @@ namespace World {
 		const Material *Material = &MatLib::Gray();;
 		Math::Vector Normal(0.0, 1.0, 0.0);
 		Double Distance = GetDoubleProp(Node, "distance");
-			
+
 		OmitComments(Cur);
 		for (; Cur != NULL; Cur = Cur->next, OmitComments(Cur)) {
 			if (!GotNormal && IsToken(Cur, "Normal")) {
@@ -572,8 +581,8 @@ namespace World {
 			if (!GotMaterial && IsToken(Cur, "Material")) {
 				std::string id = GetProp(Cur, "id");
 				Material = GetMaterial(id);
-				if (!Material) 
-					throw XMLError(Cur, 
+				if (!Material)
+					throw XMLError(Cur,
 						"Material doesn't exist");
 				GotMaterial = true;
 			} else
@@ -665,6 +674,14 @@ namespace World {
 					ParsePlane(cur);
 					continue;
 				}
+
+				if (IsToken(cur, "Dump")) {
+					std::cout << "*** Dump requested ***" << std::endl;
+					DumpLibrary();
+					continue;
+				}
+
+
 				throw XMLError("Invalid token in file \""
 					       + ToStr(cur->name) + "\"");
 			}
