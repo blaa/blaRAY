@@ -11,8 +11,19 @@
  *********************/
 
 #include <iostream>
-#include <sys/time.h>
+#include <string>
+#include <sstream>
 
+#include <sys/time.h>
+#include <unistd.h>
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+
+#include <getopt.h>
+
+#include "General/Debug.hh"
 #include "General/Types.hh"
 
 #include "Math/Matrix.hh"
@@ -152,10 +163,110 @@ void Render3(Graphics::Screen &Scr)
 	R.Render(Scr);
 }
 
-int main(void)
+static void Demo()
 {
+}
+
+static void Help()
+{
+	using namespace std;
+	cout
+	<< "Usage: ./blaRAY --demo" << endl
+	<< "       ./blaRAY [-x width] [-y height] [-a] --file <path>" << endl
+	<< "List of options:" << endl
+	<< "	--scene|-s <filename>	- Scene description to render" << endl
+	<< "	--demo			- Render demo scene instead of file" << endl
+	<< "	--width|-x <arg>	- sets screen width (default:640)" << endl
+	<< "	--height|-y <arg>	- sets screen height (default:480)" << endl
+	<< "	--antialiasing|-a	- Turn antialiasing on" << endl
+	<< "	--help|-h		- Show this help" << endl
+	<< endl
+	<< "blaRAY (C) 2008 by Tomasz bla Fortuna" << endl;
+}
+
+int main(int argc, char **argv)
+{
+	using namespace std;
+	enum { WIDTH=0, HEIGHT, SCENE, ANTIALIASING, DEMO, HELP };
+	static struct {
+		Int Width;
+		Int Height;
+		std::string Filename;
+		Bool Antialiasing;
+	} Configuration = {
+		640, 480, "", false
+	};
+
+	static struct option long_options[] = {
+		{"width", 1, 0, 0},
+		{"height", 1, 0, 0},
+		{"scene", 1, 0, 0},
+		{"antialiasing", 0, 0, 0},
+		{"demo", 0, 0, 0},
+		{"help", 0, 0, 0},
+		{NULL, 0, 0, 0}
+	};
+
+	for (;;) {
+		int c, index;
+		c = getopt_long(argc, argv, "x:y:s:adh",
+				long_options, &index);
+		if (c == -1)
+			break; /* End of parameters */
+
+		cout << (int)c << " == option" << " index:" << index << endl;
+
+		switch (c) {
+		case 0: break;
+		case 'x': index = WIDTH; break;
+		case 'y': index = HEIGHT; break;
+		case 's': index = SCENE; break;
+		case 'a': index = ANTIALIASING; break;
+		case 'd': index = DEMO; break;
+		case 'h': index = HELP; break;
+		}
+
+		std::string opt("");
+		if (optarg) opt = optarg;
+		stringstream s(opt);
+
+		switch (index) {
+		case WIDTH:
+			s >> Configuration.Width;
+			break;
+		case HEIGHT:
+			s >> Configuration.Height;
+			break;
+		case SCENE:
+			s >> Configuration.Filename;
+			break;
+		case ANTIALIASING:
+			Configuration.Antialiasing = true;
+			break;
+
+		case DEMO:
+			Demo();
+			break;
+
+		case HELP:
+			Help();
+			return 0;
+		}
+	}
+
+	cout << "Configuration:" << endl
+	     << "Width = " << Configuration.Width << endl
+	     << "Height= " << Configuration.Height << endl
+	     << "SceneFile = " << Configuration.Filename << endl
+	     << "Antialiasing = " << (Configuration.Antialiasing
+				      ? "true" : "false") << endl;
+
+	return 0;
+
+
 	struct timeval A, B;
-	Testcases::All();
+	if (DEBUG)
+		Testcases::All();
 
 	/* Render something */
 	Graphics::Screen Scr(640, 480);

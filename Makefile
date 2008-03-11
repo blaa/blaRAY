@@ -20,11 +20,11 @@ SCENE=	World/Object.cc World/Plane.cc World/Color.cc \
 	World/Scene.cc World/SceneXML.cc
 RENDER=	Render/Ray.cc Render/Photon.cc Render/Raytracer.cc
 MISC=	General/Testcases.cc
-SOURCES=$(IO) $(MATH) $(SCENE) $(RENDER) $(MISC) blaray.cc
+SOURCES=$(IO) $(MATH) $(SCENE) $(RENDER) $(MISC) blaRAY.cc
 
 OBJECTS=$(SOURCES:.cc=.o)
 DEPS=$(SOURCES:.cc=.d)
-EXEC=blaray
+EXEC=blaRAY
 
 .PHONY: main clean docclean distclean doc doxygen
 
