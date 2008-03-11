@@ -1,0 +1,61 @@
+<Scene>
+  <Atmosphere idx="Air" />
+
+  <!-- Texture definitions -->
+  <Texture id="CheckedTex" type="Checked">
+    <Color id="Black" />
+    <Color id="White" />
+  </Texture>
+
+  <!-- Material definitions -->
+  <Material id="RedMat"
+	    diffuse="Red" specular="White"
+	    reflect="Gray" refract="Black"
+	    shininess="20.0" />
+  <Material id="GreenMat"
+	    diffuse="Green" specular="White"
+	    reflect="Gray" shininess="20.0" />
+  <Material id="BlueMat"
+	    diffuse="Blue" specular="White"
+	    reflect="Gray" shininess="20.0" />
+
+  <Material id="CheckedMat" diffuse="CheckedTex" specular="Black" />
+
+  <!-- Scene objects -->
+  <Sphere radius="1.0">
+    <Position x="-1.0" y="0.0" z="8.0" />
+    <Material id="RedMat" />
+  </Sphere>
+
+  <Sphere radius="1.0">
+    <Position x="1.0" y="0.0" z="7.0" />
+    <Material id="GreenMat" />
+  </Sphere>
+
+  <Sphere radius="1.0">
+    <Position x="1.0" y="0.0" z="10.0" />
+    <Material id="BlueMat" />
+  </Sphere>
+
+  <Plane distance="-1.0">
+    <Material id="CheckedMat" />
+    <Normal x="0.0" y="1.0" z="0.0" />
+  </Plane>
+  <!-- Scene lights -->
+  <Light type="Point">
+    <Position x="-3.0" y="10.0" z="6.0" />
+    <Color id="White" />
+  </Light>
+
+  <Light type="Ambient">
+    <Color r="0.1" g="0.1" b="0.1" />
+  </Light>
+
+  <!-- Scene Camera -->
+  <Camera FOV="45">
+    <Pos x="-2.0" y="3.0" z="-2.0" />
+    <Dir x="0.2" y="-0.3" z="1.0" />
+  </Camera>
+
+  <Dump />
+</Scene>
