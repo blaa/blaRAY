@@ -35,10 +35,10 @@ namespace World {
 		Double FOV;
 
 		/** Position at which camera is located */
-		const Math::Vector Pos;
+		Math::Vector Pos;
 
 		/** Direction the camera is pointing. */
-		const Math::Vector Dir;
+		Math::Vector Dir;
 
 		/** Vector defining 'top' direction of camera;
 		 *  can be calculated automatically.

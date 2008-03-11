@@ -84,25 +84,48 @@ namespace World {
 
 		/*** Facilities for reading XML Files */
 		/*@{ XML Readers */
+		/** Initialize default items library */
 		void CreateLibrary();
 
+		/** Parse color (return it and name it) */
 		Color ParseColor(xmlNodePtr Node);
+		/** Parse vector (return it's value only) */
 		Math::Vector ParseVector(xmlNodePtr Node);
+		/** Parse named or given refractive index */
+		Double ParseIdx(xmlNodePtr Node);
 
+		/** Lookup material in library */
+		const Material *GetMaterial(const std::string &id);
+		/** Lookup texture in library */
+		const Texture *GetTexture(const std::string &id);
+
+		/** Texture parser */
 		void ParseTexture(xmlNodePtr Node);
+		/** Material parser */
 		void ParseMaterial(xmlNodePtr Node);
-		void ParsePointLight(xmlNodePtr Node);
-		void ParseAmbientLight(xmlNodePtr Node);
+		/** Point/Ambient light parser */
+		void ParseLight(xmlNodePtr Node);
+
+		/** Parse camera data */
+		void ParseCamera(xmlNodePtr Node);
+
+		/** Sphere parser */
 		void ParseSphere(xmlNodePtr Node);
+		/** Plane parser */
 		void ParsePlane(xmlNodePtr Node);
 		/*@}*/
 
+		/**@{ Loaded items + default items library */
 		std::map<std::string, Color> ColMap;
-		std::map<std::string, Texture *> TexMap;
-		std::map<std::string, Material *> MatMap;
+		std::map<std::string, const Texture *> TexMap;
+		std::map<std::string, const Material *> MatMap;
+		std::map<std::string, const Double> IdxMap;
+
 		typedef std::map<std::string, Color>::iterator ColIter;
-		typedef std::map<std::string, Texture *>::iterator TexIter;
-		typedef std::map<std::string, Material *>::iterator MatIter;
+		typedef std::map<std::string, const Texture *>::iterator TexIter;
+		typedef std::map<std::string, const Material *>::iterator MatIter;
+		typedef std::map<std::string, const Double>::iterator IdxIter;
+		/*@}*/
 
 	public:
 		/** Initialize scene management */
@@ -167,7 +190,7 @@ namespace World {
 		Bool Collide(const Render::Ray &R, Double &RayPos, const Object* &O) const;
 
 		/** Reader */
-		bool ParseFile(std::string File);
+		Bool ParseFile(const std::string &File);
 
 		/** Scene background accessor */
 		inline const Color &GetBackground() const {

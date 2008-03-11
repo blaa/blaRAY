@@ -1,7 +1,7 @@
  
 <Scene>
-  <Background r="0.0" g="0.0" b="0.0" />
-  <Atmosphere named="Air" />
+  <Background r="1.0" g="0.0" b="0.0" />
+  <Atmosphere named="Air" /> <!-- idx or named -->
 <!--  <Atmosphere idx="1.00000234" /> -->
 
   <Color id="Octarine" r="1.0" g="0.0" b="1.0" />
@@ -24,8 +24,9 @@
   <Material id="Glass"
 	    diffuse="Black" specular="White"
 	    reflect="Gray" refract="Black"
-	    idx="Water" />
+	    shininess="12.0" idx="Glass" />
 
+  <Material id="Plane" diffuse="Gray" />
   <Sphere radius="1.0">
     <Position x="1.0" y="0.0" z="8.0" />
     <Material id="Glass" />
@@ -42,22 +43,21 @@
   </Sphere>
 
   <Plane distance="-1.0">
-    <Position x="0.0" y="1.0" z="0.0" />
-    <Material type="Plain"> <!-- Inline material definition -->
-      <Color named="Gray" />
-    </Material>
+    <Normal x="0.0" y="1.0" z="0.0" />
   </Plane>
 
   <Light type="Point">
     <Position x="3.0" y="10.0" z="7.0" />
+    <Color id="Blue" />
   </Light>
 
   <Light type="Ambient">
-    <Color named="Blue" />
+    <Color id="Blue" />
   </Light>
 
-  <Camera>
-    <Position x="-2.0" y="3.0" z="-2.0" />
-    <Direction x="0.2" y="-0.3" z="1.0" />
+  <Camera FOV="45">
+    <Pos x="-2.0" y="3.0" z="-2.0" />
+    <Dir x="0.2" y="-0.3" z="1.0" />
+    <!-- <Top x="0.2" y="-0.3" z="1.0" /> -->
   </Camera>
 </Scene>

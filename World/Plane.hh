@@ -44,7 +44,7 @@ namespace World {
 		Plane(const Math::Vector &Normal,
 		      Double Distance,
 		      const Material &M = MatLib::Red(),
-		      e_t(bool) Visible = true)
+		      Bool Visible = true)
 			: Object(M, Visible),
 			  Normal(Normal), Distance(Distance)
 		{

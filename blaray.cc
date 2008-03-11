@@ -146,7 +146,10 @@ void Render3(Graphics::Screen &Scr)
 {
 	using namespace World;
 	Scene S;
-	S.ParseFile("Examples/Scene1.xml");
+	if (S.ParseFile("Examples/Scene1.xml") == false)
+		throw 42;
+	Render::Raytracer R(S, true);
+	R.Render(Scr);
 }
 
 int main(void)
