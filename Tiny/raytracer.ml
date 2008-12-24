@@ -602,8 +602,7 @@ module Scene =
 		    );
 
                 )else
-		  (best_t, best_obj, opacity)
-
+		  (best_t, best_obj, opacity) 
 	  | _ -> (best_t, best_obj, opacity)
       in
         List.fold_left collide (infinity, NoObject, 0.0) !objects
@@ -618,8 +617,8 @@ module Graph =
 
     let put_pixel x y color =
       let c = Color.graph_of_color color in
-        Graphics.set_color c;
-        Graphics.plot x y
+        Graphics.set_color c; 
+        Graphics.plot x y 
 
     let stop () =
       Graphics.close_graph ()
