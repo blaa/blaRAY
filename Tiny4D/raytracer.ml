@@ -6,204 +6,15 @@ open Printf
 
 let fabs a = if a < 0.0 then -. a else a
 
-(** Our main hero **)
-module Vect =
+module Cfg =
   struct
-    type t = {
-      x : float;
-      y : float;
-      z : float;
-    }
-
-    let zero = {
-      x = 0.0;
-      y = 0.0;
-      z = 0.0;
-    }
-
-    let print v =
-      printf "%5.7f %5.7f %5.7f" v.x v.y v.z
-
-    let create x y z = {
-      x = x;
-      y = y;
-      z = z;
-    }
-
-    let get v =
-      (v.x, v.y, v.z)
-
-    let add a b = {
-      x = a.x +. b.x;
-      y = a.y +. b.y;
-      z = a.z +. b.z;
-    }
-
-    let sub a b = {
-      x = a.x -. b.x;
-      y = a.y -. b.y;
-      z = a.z -. b.z;
-    }
-
-    let dot a b =
-      (a.x *. b.x) +. (a.y *. b.y) +. (a.z *. b.z)
-
-    let cross a b = {
-      x = a.y *. b.z -. a.z *. b.y;
-      y = a.z *. b.x -. a.x *. b.z;
-      z = a.x *. b.y -. a.y *. b.x;
-    }
-
-    let mul f v = {
-      x = v.x *. f;
-      y = v.y *. f;
-      z = v.z *. f;
-    }
-
-    let length2 a =
-      a.x *. a.x +. a.y *. a.y +. a.z *. a.z
-
-    let length a =
-      sqrt (length2 a)
-
-    let normalize a =
-      let len = length a in {
-	  x = a.x /. len;
-	  y = a.y /. len;
-	  z = a.z /. len;
-        }
+    let eps = 0.0005
+    let max_iter = 5
+    let max_inf = 20.0
+    let delta = 0.0001
+    let bounding_sphere = 100.0
   end
 
-module Quat =
-  struct
-    type t = {
-      x : float;
-      y : float;
-      z : float;
-      w : float;
-    }
-
-    let zero = {
-      x = 0.0;
-      y = 0.0;
-      z = 0.0;
-      w = 0.0
-    }
-
-    let print v =
-      printf "(%5.7f %5.7f %5.7f %5.7f)" v.x v.y v.z v.w
-
-    let create x y z w = {
-      x = x;
-      y = y;
-      z = z;
-      w = w;
-    }
-
-    let get v =
-      (v.x, v.y, v.z, v.w)
-
-    let add a b = {
-      x = a.x +. b.x;
-      y = a.y +. b.y;
-      z = a.z +. b.z;
-      w = a.w +. b.w;
-    }
-
-    let sub a b = {
-      x = a.x -. b.x;
-      y = a.y -. b.y;
-      z = a.z -. b.z;
-      w = a.w -. b.w;
-    }
-
-    let addc ~q ~c = {
-      x = q.x +. c;
-      y = q.y +. c;
-      z = q.z +. c;
-      w = q.w +. c;
-    }
-
-    let mulc ~q ~c = {
-      x = q.x *. c;
-      y = q.y *. c;
-      z = q.z *. c;
-      w = q.w *. c;
-    }
-
-
-    let dot a b =
-      (a.x *. b.x) +. (a.y *. b.y) +. (a.z *. b.z) +. (a.w *. b.w)
-
-    let cross a b = {
-      x = a.x*.b.x -. a.y*.b.y -. a.z*.b.z -. a.w*.b.w;
-      y = a.x*.b.y +. a.y*.b.x +. a.z*.b.w -. a.w*.b.z;
-      z = a.x*.b.z -. a.y*.b.w +. a.z*.b.x +. a.w*.b.y;
-      w = a.x*.b.w +. a.y*.b.z -. a.z*.b.y +. a.w*.b.x;
-    }
-
-    let square a = {
-      x = a.x *. a.x -. a.y *. a.y -. a.z -. a.w *. a.w;
-      y = 2. *. a.x *. a.y; 
-      z = 2. *. a.x *. a.z; 
-      w = 2. *. a.x *. a.w; 
-    }
-
-    let len2 a =
-      a.x *. a.x +. a.y *. a.y +. a.z *. a.z +. a.w *. a.w
-
-    let len a =
-      sqrt (len2 a)
-
-    let normalize a =
-      let len = len a in {
-	  x = a.x /. len;
-	  y = a.y /. len;
-	  z = a.z /. len;
-	  w = a.w /. len;
-        }
-  end
-
-
-(** Module creating/operating on rays **)
-module Ray =
-  struct
-    type t = {
-      start : Vect.t; (* Start vector     *)
-      dir : Vect.t;   (* Direction vector *)
-    }
-
-    let print r =
-      printf "Ray: start: (";
-      Vect.print r.start;
-      printf "), dir: (";
-      Vect.print r.dir;
-      printf ")\n%!"
-
-    let get_start r =
-      r.start
-
-    let get_dir r =
-      r.dir
-
-    let point_of_t ~ray ~t =
-      Vect.add ray.start (Vect.mul t ray.dir)
-
-    let create ~start ~dir () = {
-      start = start;
-      dir = dir;
-    }
-
-    let gen_reflected_ray ~ray ~normal ~collision_point =
-      let a = 2.0 *. (Vect.dot normal ray.dir) in
-      let dir = Vect.sub ray.dir (Vect.mul a normal) in
-        create ~start:collision_point ~dir:(Vect.normalize dir) ()
-
-    let ray_of_points ~source ~destination () =
-      let dir = Vect.sub destination source in
-        create ~start:source ~dir:(Vect.normalize dir) ()
-
-  end
 
 (** Color **)
 module Color =
@@ -290,6 +101,234 @@ module Color =
         }
   end
 
+module Graph =
+  struct
+    let start x y =
+      (* Open graphics *)
+      Graphics.open_graph "";
+      Graphics.resize_window x y
+
+    let put_pixel x y color =
+      let c = Color.graph_of_color color in
+        Graphics.set_color c; 
+        Graphics.plot x y 
+
+    let stop () =
+      Graphics.close_graph ()
+
+    let wait () =
+      ignore (input_char stdin)
+  end
+
+(** Our main hero **)
+module Vect =
+  struct
+    type t = {
+      x : float;
+      y : float;
+      z : float;
+    }
+
+    let zero = {
+      x = 0.0;
+      y = 0.0;
+      z = 0.0;
+    }
+
+    let print v =
+      printf "%5.7f %5.7f %5.7f" v.x v.y v.z
+
+    let create x y z = {
+      x = x;
+      y = y;
+      z = z;
+    }
+
+    let get v =
+      (v.x, v.y, v.z)
+
+    let add a b = {
+      x = a.x +. b.x;
+      y = a.y +. b.y;
+      z = a.z +. b.z;
+    }
+
+    let sub a b = {
+      x = a.x -. b.x;
+      y = a.y -. b.y;
+      z = a.z -. b.z;
+    }
+
+    let dot a b =
+      (a.x *. b.x) +. (a.y *. b.y) +. (a.z *. b.z)
+
+    let cross a b = {
+      x = a.y *. b.z -. a.z *. b.y;
+      y = a.z *. b.x -. a.x *. b.z;
+      z = a.x *. b.y -. a.y *. b.x;
+    }
+
+    let mul f v = {
+      x = v.x *. f;
+      y = v.y *. f;
+      z = v.z *. f;
+    }
+
+    let len2 a =
+      a.x *. a.x +. a.y *. a.y +. a.z *. a.z
+
+    let len a =
+      sqrt (len2 a)
+
+    let normalize a =
+      let len = len a in {
+	  x = a.x /. len;
+	  y = a.y /. len;
+	  z = a.z /. len;
+        }
+  end
+
+module Quat =
+  struct
+    type t = {
+      x : float;
+      y : float;
+      z : float;
+      w : float;
+    }
+
+    let zero = {
+      x = 0.0;
+      y = 0.0;
+      z = 0.0;
+      w = 0.0
+    }
+
+    let print v =
+      printf "(%5.7f %5.7f %5.7f %5.7f)" v.x v.y v.z v.w
+
+    let create x y z w = {
+      x = x;
+      y = y;
+      z = z;
+      w = w;
+    }
+
+    let fromvect ?(w=0.0) v =
+      let x,y,z = Vect.get v in
+	create x y z w
+
+    let get v =
+      (v.x, v.y, v.z, v.w)
+
+    let add a b = {
+      x = a.x +. b.x;
+      y = a.y +. b.y;
+      z = a.z +. b.z;
+      w = a.w +. b.w;
+    }
+
+    let sub a b = {
+      x = a.x -. b.x;
+      y = a.y -. b.y;
+      z = a.z -. b.z;
+      w = a.w -. b.w;
+    }
+
+    let addc ~q ~c = {
+      x = q.x +. c;
+      y = q.y +. c;
+      z = q.z +. c;
+      w = q.w +. c;
+    }
+
+    let mulc ~q ~c = {
+      x = q.x *. c;
+      y = q.y *. c;
+      z = q.z *. c;
+      w = q.w *. c;
+    }
+
+    let dot a b =
+      (a.x *. b.x) +. (a.y *. b.y) +. (a.z *. b.z) +. (a.w *. b.w)
+
+    let mul a b = {
+      x = a.x*.b.x -. a.y*.b.y -. a.z*.b.z -. a.w*.b.w;
+      y = a.x*.b.y +. a.y*.b.x +. a.z*.b.w -. a.w*.b.z;
+      z = a.x*.b.z -. a.y*.b.w +. a.z*.b.x +. a.w*.b.y;
+      w = a.x*.b.w +. a.y*.b.z -. a.z*.b.y +. a.w*.b.x;
+    }
+
+    let cross a b c = {
+      x = a.y*.(b.w*.c.z -. b.z*.c.w) +. b.y*.(a.z*.c.w -. a.w*.c.z) +. c.y*.(a.w*.b.z -. a.z*.b.w);
+      y = a.x*.(b.z*.c.w -. b.w*.c.z) +. b.x*.(a.w*.c.z -. a.z*.c.w) +. c.x*.(a.z*.b.w -. a.w*.b.z);
+      z = a.x*.(b.w*.c.y -. b.y*.c.w) +. b.x*.(a.y*.c.w -. a.w*.c.y) +. c.x*.(a.w*.b.y -. a.y*.b.w);
+      w = a.x*.(b.y*.c.z -. b.z*.c.y) +. b.x*.(a.z*.c.y -. a.y*.c.z) +. c.x*.(a.y*.b.z -. a.z*.b.y);
+    }
+
+    let square a = {
+      x = a.x*.a.x -. a.y*.a.y -. a.z*.a.z -. a.w*.a.w;
+      y = 2. *. a.x *. a.y; 
+      z = 2. *. a.x *. a.z; 
+      w = 2. *. a.x *. a.w; 
+    }
+
+    let len2 a =
+      a.x *. a.x +. a.y *. a.y +. a.z *. a.z +. a.w *. a.w
+
+    let len a =
+      sqrt (len2 a)
+
+    let normalize a =
+      let len = len a in {
+	  x = a.x /. len;
+	  y = a.y /. len;
+	  z = a.z /. len;
+	  w = a.w /. len;
+        }
+  end
+
+
+(** Module creating/operating on rays **)
+module Ray =
+  struct
+    type t = {
+      start : Vect.t; (* Start vector     *)
+      dir : Vect.t;   (* Direction vector *)
+    }
+
+    let print r =
+      printf "Ray: start: (";
+      Vect.print r.start;
+      printf "), dir: (";
+      Vect.print r.dir;
+      printf ")\n%!"
+
+    let get_start r =
+      r.start
+
+    let get_dir r =
+      r.dir
+
+    let point_of_t ~ray ~t =
+      Vect.add ray.start (Vect.mul t ray.dir)
+
+    let create ~start ~dir () = {
+      start = start;
+      dir = dir;
+    }
+
+    let gen_reflected_ray ~ray ~normal ~collision_point =
+      let a = 2.0 *. (Vect.dot normal ray.dir) in
+      let dir = Vect.sub ray.dir (Vect.mul a normal) in
+        create ~start:collision_point ~dir:(Vect.normalize dir) ()
+
+    let ray_of_points ~source ~destination =
+      let dir = Vect.sub destination source in
+        create ~start:source ~dir:(Vect.normalize dir) ()
+
+  end
+
 (** Camera type **)
 module Camera =
   struct
@@ -369,60 +408,75 @@ module Camera =
 
 module Julia =
   struct
+    type t = {
+      color : Color.t;
+      c : Quat.t;
+    }
 
-    let pt_debug a =
-      let a,b,c,d = a in
-	printf "(%10.5f %10.5f %10.5f %10.5f)" a b c d
+    let create () = {
+      color = Color.red;
+      c = Quat.create (-1.) (-0.2) 0.0 0.0;
+    }
 
-    let create () =
-      Quat.create (-1.) (-0.2) 0.0 0.0
+    let get_color ~julia = julia.color
+    let get_c ~julia = julia.c
+
+    let step ~z ~c =
+      Quat.add (Quat.square z) c
 
     let intersect ~julia ~ray =
-      (* Initial ray start position *)
-      let dir = ray.Ray.dir
-      and start = ray.Ray.start
-      and max = 60.0
-      and eps = 0.1 in
+      printf "Intersecting julia with ray ";
+      Ray.print ray;
+      printf "\n";
+
 
       let rec limes ~zn ~dn ~iter =
-	let zn' = Quat.add (Quat.cross zn zn) julia
-	and dn' = Quat.mulc ~q:(Quat.cross zn dn) ~c:2.0 in
-	let len = Quat.len2 zn' in
-	  if iter = 0 or len > max then
-	    len, dn'
+	let zn' = step ~z:zn ~c:julia.c
+	and dn' = Quat.mulc ~q:(Quat.mul zn dn) ~c:2.0 in
+	let len2 = Quat.len2 zn' in
+(*	  printf "Limes point=";
+	  Quat.print zn';
+	  printf " %d iterleft \n" iter; *)
+	  if iter = 0 (* or len2 > Cfg.max_inf *)then
+	    len2, dn'
 	  else
 	    limes ~zn:zn' ~dn:dn' ~iter:(iter - 1)
       in
 
-      let rec loop prev_dist point =
+      let rec loop t =
 	(* point - point being tested for distance from julia set
 	 * d0 - derivative start *)
-	let d0 = Quat.create 1. 0. 0. 0. in
+	let point = Quat.fromvect (Ray.point_of_t ~ray ~t) in
+(*	  printf "Point = ";
+	  Quat.print point;
+	  printf "; \n"; *)
 
-	let len2, dn = limes ~zn:point ~dn:d0 ~iter:30 in
-	let len = sqrt len2 in  
-	let dist = 0.5 *. len *. (log len) /. (Quat.len dn) in
- 	let dx,dy,dz = Vect.get dir in
-	let point' = Quat.add point (Quat.create (dist*.dx) (dist*.dy) (dist *.dz) 0.)
-	in
+	  if (Quat.len2 point) > Cfg.bounding_sphere then (
+	    printf "Out of sphere!\n";
 
-	  if prev_dist < dist then (
-	    point, prev_dist
-	  ) else if dist < eps then (
-	    point', dist
-	  ) else (
-	    loop dist point'
-	  )
+	    point, infinity
+	  ) else (	    
+
+	    let d0 = Quat.create 1. 0. 0. 0. in
+	    let len2, dn = limes ~zn:point ~dn:d0 ~iter:Cfg.max_iter in
+	    let len = sqrt len2 in
+	    let dist = 0.5 *. (log len) *. len /. (Quat.len dn) in
+	    let t' = t +. dist in
+	      printf "dist=%10.5f " dist;
+	      if dist < Cfg.eps then (
+		printf "Found!\n";
+		point, dist
+	      ) else (
+		printf "Looping...\n";
+		loop t'
+	      )
+          )
       in
-      
-
-      let z0 = Quat.create start.Vect.x start.Vect.y start.Vect.z 0.0 in
-	loop infinity z0
+	loop 0.0
 
     (* Gradient normal *)
     let normal ~julia ~point =
-      let d = 0.0001
-      and max = 4  in
+      let d = Cfg.delta in
       let dd = [|
 	Quat.add point (Quat.create d 0. 0. 0.);
 	Quat.add point (Quat.create (-.d) 0. 0. 0.);
@@ -431,12 +485,12 @@ module Julia =
 	Quat.add point (Quat.create 0. 0. d 0.);
 	Quat.add point (Quat.create 0. 0. (-.d) 0.);
       |] in
-      let step i a = dd.(i) <- Quat.add (Quat.cross a a) julia in
+      let step i z = dd.(i) <- step ~z ~c:julia.c in
       let rec loop iter =
 	Array.iteri step dd;
 	if iter <> 0 then loop (iter - 1)
       in
-	loop max;
+	loop Cfg.max_iter;
 	let g_x = (Quat.len dd.(0)) -. (Quat.len dd.(1)) 
 	and g_y = (Quat.len dd.(2)) -. (Quat.len dd.(3)) 
 	and g_z = (Quat.len dd.(4)) -. (Quat.len dd.(5)) in
@@ -448,123 +502,39 @@ module Julia =
   end
 
 
-module Scene =
-  struct
-    let pi = 4.0 *. atan(1.0)
-
-    type light = {
-      light_pos : Vect.t;
-      light_color : Color.t;
-    }
-
-    let lights = ref []
-    let julia = Julia.create ()
-    let julia_color = Color.red
-
-    (* Getters *)
-    let get_object_color () = julia_color
-
-    let get_light_position l =
-      l.light_pos
-
-    let get_light_color l =
-      l.light_color
-
-    let get_normal obj point =
-      match obj with
-        |_ -> failwith "Wrong object specified"
-
-    (* Adders *)
-    let add_light ~location ~color =
-      let light = {
-        light_pos = location;
-        light_color = color;
-      } in
-        lights := light :: (!lights)
-
-    let lights_fold f init =
-      List.fold_left f init !lights
-
-    let rec find_collision ~ray =
-      flush stdout;
-      let point, dist = Julia.intersect ~julia ~ray in
-      let x,y,z,w = Quat.get point in
-      let col = Vect.create x y z in
-	if dist < 0.1 then
-	  let nx, ny, nz = Julia.normal ~julia ~point in
-	    (col, dist, Vect.normalize (Vect.create nx ny nz))
-	else 
-	  (col, dist, col) (* PLACE HERE A NORMAL! *)
-
-  end
-
-module Graph =
-  struct
-    let start x y =
-      (* Open graphics *)
-      Graphics.open_graph "";
-      Graphics.resize_window x y
-
-    let put_pixel x y color =
-      let c = Color.graph_of_color color in
-        Graphics.set_color c; 
-        Graphics.plot x y 
-
-    let stop () =
-      Graphics.close_graph ()
-
-    let wait () =
-      ignore (input_char stdin)
-  end
-
 module Render =
   struct
-    let n_vacuum = 1.0
-    let n_air = 1.0002926
-    let n_water = 1.333
-    let n_diamond = 2.419
-    let n_amber = 1.55
-    let n_salt = 1.544
-    let n_ice = 1.31
-    let n_glass = 1.60
-
     (* Stats *)
     let main_rays = ref 0
     and shadow_rays = ref 0
 
-    (* Arguments:
-       ambient - Ambient color
-       refract_stack - Stack of refract indexes used for leaving objects
-       depth - Current depth used to stop recursion at some level
-       ray - currently traced ray
-    *)
-    let rec tracer ~background ~ambient ~depth ~ray =
-      let collision_point, t, normal = Scene.find_collision ~ray in
-        if t < 0.1 then ( (* EPS! *)
+    (* The main tracing program created in render *)
+    let rec tracer ~background ~ambient ~depth ~lights ~julia ~ray =
+      (* Find collision point with julia *)
+      let point, t = Julia.intersect ~julia ~ray in
+      let x, y, z, _ = Quat.get point in 
+      let collision_point = Vect.create x y z in
+        if t < Cfg.eps then ( (* EPS! *)
+	  (* Calculate normal *)
+	  let nx, ny, nz = Julia.normal ~julia ~point in
+	  let normal = Vect.normalize (Vect.create nx ny nz) in
 	  (* Read color info at collision point *)
 
-	  let diffuse = Scene.get_object_color () in
+	  let diffuse = Julia.get_color ~julia in
 
 	  (* Function to be 'left folded' over lights list
 	     it checks shadow rays for diffuse + specular lightening *)
 	  let light_check diffuse light =
-	    let light_pos = Scene.get_light_position light
-	    and light_color = Scene.get_light_color light in
+	    let light_pos, light_color = light in
 	    let light_ray =
 	      Ray.ray_of_points
                 ~source:collision_point
-                ~destination:light_pos ()
-	    in
-	      incr  shadow_rays;
-	      (* Is anything in a way? *)
-	      (* FIXME:
-		 In this place we should add additional light filter so the light
-		 would get coloured when passing through transparent object
-		 It would have to be done in the Scene collision function...
-	      *)
+                ~destination:light_pos
+	    in 
+	      incr shadow_rays; 
 
-	      let point, distance, _ =
-                Scene.find_collision ~ray:light_ray in
+(*	      let point, distance, _ =
+                Scene.find_collision ~ray:light_ray in *)
 	      let light_visibility = 1.0
 (*                if distance > 0.1 then
 		  1.0
@@ -585,7 +555,8 @@ module Render =
 
 	  (* fold this function and calculate diffuse and specular light intensity *)
 	  let diffuse_color =
-	    Scene.lights_fold light_check Color.black in
+	    List.fold_left light_check Color.black lights in
+
 
 	  let result = Color.combine (Color.add [ambient; diffuse_color]) diffuse in
 	    `COLOR result
@@ -593,118 +564,77 @@ module Render =
 	  `BACKGROUND
         )
 
-    let ray_iter
-        ~antialiasing
-        ~background
-        ~put_pixel
-        ~xres ~yres
-        ~camera
-        ~tracer =
-      let trace_for_color ray =
-        match tracer ~ray with
-	  | `BACKGROUND -> background
-	  | `COLOR c -> c
-      in
-        if antialiasing then (
-	  let ray_of_xy =
-	    Camera.gen_ray_of_xy
-	      ~cnt:main_rays
-	      ~xres:(xres * 5)
-	      ~yres:(yres * 5) ~camera
-	  in
-	    for y = 0 to yres do
-	      for x = 0 to xres do
-                let curx, cury = x * 5 + 2, y * 5 + 2 in
-                let rays = [
-		  ray_of_xy (curx-1) (cury-1);
-		  ray_of_xy (curx+1) (cury+1);
-		  ray_of_xy (curx-1) (cury+1);
-		  ray_of_xy (curx+1) (cury-1);
-                ]in
-                let colors = List.map trace_for_color rays in
-		  put_pixel x y (Color.average colors)
-	      done;
-	    done
-        )else (
-	  let ray_of_xy =
-	    Camera.gen_ray_of_xy
-	      ~cnt:main_rays
-	      ~xres ~yres
-	      ~camera
-	  in
-	    for y = yres downto 0 do
-	      for x = 0 to xres do
-                let ray = ray_of_xy x y in
-                let color = trace_for_color ray in
-		  put_pixel x y color
-	      done;
-	    done
-        )
-    ;;
 
     let render
-        ?(n_atmosphere=n_air)
-        ?(antialiasing=true)
         ?(background=Color.black)
         ?(ambient=Color.black)
-        ~xres ~yres ~camera () =
+        ~xres ~yres ~camera ~lights ~julia () =
 
-      printf "*** Rendering scene ***\n";
-      let time1 = Unix.time () in
-      Camera.print camera;
+      let ray_iter ~put_pixel ~tracer =
+	let trace_for_color ray =
+          match tracer ~ray with
+	    | `BACKGROUND -> background
+	    | `COLOR c -> c
+	in
+	let ray_of_xy =
+	  Camera.gen_ray_of_xy
+	    ~cnt:main_rays
+	    ~xres ~yres
+	    ~camera
+	in
+	  for y = yres downto 0 do
+	    for x = 0 to xres do
+              let ray = ray_of_xy x y in
+              let color = trace_for_color ray in
+		put_pixel x y color
+	    done;
+	  done
+      in
 
-      Graph.start xres yres;
+	printf "*** Rendering scene ***\n";
+	let time1 = Unix.time () in
 
-      ray_iter
-	~antialiasing
-	~background
-	~xres ~yres
-	~camera
-	~put_pixel:Graph.put_pixel
-	~tracer:(tracer ~background ~ambient ~depth:8);
+	  Camera.print camera;
+	  Graph.start xres yres;
 
-      printf "(%d main rays) (%d shadow rays) "
-	!main_rays !shadow_rays;
-      printf "traced = %d in %5.2f seconds\n%!"
-	(!main_rays + !shadow_rays)
-	(Unix.time () -. time1);
-
-      Graph.wait ();
-      Graph.stop ();
+	  ray_iter ~put_pixel:Graph.put_pixel ~tracer:(tracer ~background ~ambient ~lights ~julia ~depth:8);
+	  
+	  printf "(%d main rays) (%d shadow rays) "
+	    !main_rays !shadow_rays;
+	  printf "traced = %d in %5.2f seconds\n%!"
+	    (!main_rays + !shadow_rays)
+	    (Unix.time () -. time1);
+	  
+	  Graph.wait ();
+	  Graph.stop ();
   end
 
 
-type renderer =
-    ?background:Color.t
-    -> ?ambient:Color.t
-    -> camera:Camera.t
-    -> unit -> unit 
-
-let render_scene1 (renderer:renderer) =
-
-  Scene.add_light
-    ~location:(Vect.create 3. 8. (-7.))
-    ~color:(Color.create 0.3 0.3 0.3);
-
-
-  let camera = Camera.create 
-    ~loc:(Vect.create (0.0) 0.0 (-7.0)) 
+(* Scene settings + renderer settings + render *)
+let _ =
+  let julia = Julia.create ()
+  and lights = [
+    (Vect.create 3. 8. (-5.)),
+    (Color.create 0.3 0.3 0.3)
+  ]
+    
+  and camera = Camera.create 
+    ~loc:(Vect.create (0.0) 0.0 (-6.0)) 
     ~dir:(Vect.create 0.0 0.0 1.0)
     ()
   and ambient = Color.create 0.1 0.1 0.1
   and background = Color.create 0.5 0.5 0.5 in
-    renderer ~ambient ~background ~camera ()
-;;
-
-
-let _ =
-  let renderer =
-    Render.render
-      ~n_atmosphere:Render.n_air
-      ~antialiasing:true
-      ~xres:640
-      ~yres:480
+    
+  let test_ray = Ray.ray_of_points 
+    ~source:(Vect.create 0.0 0.0 (-9.0))
+    ~destination:(Vect.create 0.0 0.0 1.0)
   in
-(*    render_scene_billiards renderer; *)
-	render_scene1 renderer;
+    if false then (
+      Julia.intersect ~julia ~ray:test_ray;
+      ()
+    ) else (
+      Render.render ~xres:320 ~yres:240 ~ambient ~background ~camera ~lights ~julia ();
+      ()
+    )
+
 ;;
