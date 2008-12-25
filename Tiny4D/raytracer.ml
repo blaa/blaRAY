@@ -8,7 +8,7 @@ let fabs a = if a < 0.0 then -. a else a
 
 module Cfg =
   struct
-    let eps = 0.0005
+    let eps = 0.0001
     let max_iter = 5
     let max_inf = 20.0
     let delta = 0.0001
@@ -121,73 +121,6 @@ module Graph =
   end
 
 (** Our main hero **)
-module Vect =
-  struct
-    type t = {
-      x : float;
-      y : float;
-      z : float;
-    }
-
-    let zero = {
-      x = 0.0;
-      y = 0.0;
-      z = 0.0;
-    }
-
-    let print v =
-      printf "%5.7f %5.7f %5.7f" v.x v.y v.z
-
-    let create x y z = {
-      x = x;
-      y = y;
-      z = z;
-    }
-
-    let get v =
-      (v.x, v.y, v.z)
-
-    let add a b = {
-      x = a.x +. b.x;
-      y = a.y +. b.y;
-      z = a.z +. b.z;
-    }
-
-    let sub a b = {
-      x = a.x -. b.x;
-      y = a.y -. b.y;
-      z = a.z -. b.z;
-    }
-
-    let dot a b =
-      (a.x *. b.x) +. (a.y *. b.y) +. (a.z *. b.z)
-
-    let cross a b = {
-      x = a.y *. b.z -. a.z *. b.y;
-      y = a.z *. b.x -. a.x *. b.z;
-      z = a.x *. b.y -. a.y *. b.x;
-    }
-
-    let mul f v = {
-      x = v.x *. f;
-      y = v.y *. f;
-      z = v.z *. f;
-    }
-
-    let len2 a =
-      a.x *. a.x +. a.y *. a.y +. a.z *. a.z
-
-    let len a =
-      sqrt (len2 a)
-
-    let normalize a =
-      let len = len a in {
-	  x = a.x /. len;
-	  y = a.y /. len;
-	  z = a.z /. len;
-        }
-  end
-
 module Quat =
   struct
     type t = {
@@ -214,9 +147,9 @@ module Quat =
       w = w;
     }
 
-    let fromvect ?(w=0.0) v =
+(*    let fromvect ?(w=0.0) v =
       let x,y,z = Vect.get v in
-	create x y z w
+      create x y z w *)
 
     let get v =
       (v.x, v.y, v.z, v.w)
@@ -293,15 +226,15 @@ module Quat =
 module Ray =
   struct
     type t = {
-      start : Vect.t; (* Start vector     *)
-      dir : Vect.t;   (* Direction vector *)
+      start : Quat.t; (* Start vector     *)
+      dir : Quat.t;   (* Direction vector *)
     }
 
     let print r =
       printf "Ray: start: (";
-      Vect.print r.start;
+      Quat.print r.start;
       printf "), dir: (";
-      Vect.print r.dir;
+      Quat.print r.dir;
       printf ")\n%!"
 
     let get_start r =
@@ -311,7 +244,7 @@ module Ray =
       r.dir
 
     let point_of_t ~ray ~t =
-      Vect.add ray.start (Vect.mul t ray.dir)
+      Quat.add ray.start (Quat.mulc ~c:t ~q:ray.dir)
 
     let create ~start ~dir () = {
       start = start;
@@ -319,13 +252,13 @@ module Ray =
     }
 
     let gen_reflected_ray ~ray ~normal ~collision_point =
-      let a = 2.0 *. (Vect.dot normal ray.dir) in
-      let dir = Vect.sub ray.dir (Vect.mul a normal) in
-        create ~start:collision_point ~dir:(Vect.normalize dir) ()
+      let a = 2.0 *. (Quat.dot normal ray.dir) in
+      let dir = Quat.sub ray.dir (Quat.mulc ~c:a ~q:normal) in
+        create ~start:collision_point ~dir:(Quat.normalize dir) ()
 
     let ray_of_points ~source ~destination =
-      let dir = Vect.sub destination source in
-        create ~start:source ~dir:(Vect.normalize dir) ()
+      let dir = Quat.sub destination source in
+        create ~start:source ~dir:(Quat.normalize dir) ()
 
   end
 
@@ -333,9 +266,10 @@ module Ray =
 module Camera =
   struct
     type t = {
-      loc : Vect.t; (* Eyepoint location *)
-      dir : Vect.t; (* Viewing direction *)
-      top : Vect.t; (* Normalized vector pointing to the 'camera top' *)
+      loc : Quat.t; (* Eyepoint location *)
+      dir : Quat.t; (* Viewing direction *)
+      top : Quat.t; (* Normalized vector pointing to the 'camera top' *)
+      lim : Quat.t; (* *)
       fov : float; (* Camera horizontal field of view *)
       ratio : float; (* Aspect ratio *)
     }
@@ -343,9 +277,9 @@ module Camera =
 
     let print c =
       printf "Camera:\n";
-      printf "\tloc: ("; Vect.print c.loc; printf ")\n";
-      printf "\tdir: ("; Vect.print c.dir; printf ")\n";
-      printf "\ttop: ("; Vect.print c.top; printf ")\n";
+      printf "\tloc: ("; Quat.print c.loc; printf ")\n";
+      printf "\tdir: ("; Quat.print c.dir; printf ")\n";
+      printf "\ttop: ("; Quat.print c.top; printf ")\n";
       printf "\tfov: %5.5f (%5.5f deg)\n" c.fov (c.fov /. pi *. 360.0);
       printf "\tratio: %5.2f\n%!" c.ratio
 
@@ -360,48 +294,50 @@ module Camera =
     let get_ratio c = c.ratio
 
     let create
-        ?(loc=Vect.create 0. 0. (-7.))
-        ?(dir=Vect.create 0. 0. 1.)
-        ?(top=Vect.create 0. 1. 0.)
+        ?(loc=Quat.create 0. 0. (-7.) 0.)
+        ?(dir=Quat.create 0. 0. 1. 0.)
+        ?(top=Quat.create 0. 1. 0. 0.)
+	?(lim=Quat.create 0. 0. 0. 1.)
         ?(fov=fov_of_degree 45.0)
         ?(ratio=4.0/.3.0)
         ?(auto_top=false)
         () =
-      let dir' = Vect.normalize dir in
+      let dir' = Quat.normalize dir in
       let top' =
         if auto_top then
 	  (* top.x = dir.x, top.z = dir.z
 	     top.y calculated from constraint: top dot dir = 0 *)
-	  let (dx, dy, dz) = Vect.get dir in
-	  let ty = -. (dz ** 2.0 +. dx ** 2.0) /. dy in
-	    Vect.create dx ty dz
+	  let (dx, dy, dz, dw) = Quat.get dir in
+	  let ty = -. (dz ** 2.0 +. dx ** 2.0) /. dy in (* FIXME! *)
+	    Quat.create dx ty dz dw
         else
 	  top
       in {
 	  loc = loc;
 	  dir = dir';
-	  top = Vect.normalize top';
+	  top = Quat.normalize top';
+	  lim = Quat.normalize lim;
 	  fov = fov;
 	  ratio = ratio;
         }
 
     (* Generates camera-function which generates rays for specified x,y *)
     let gen_ray_of_xy ~cnt ~xres ~yres ~camera =
-      let cam_left = Vect.normalize (Vect.cross camera.top camera.dir) in
+      let cam_left = Quat.normalize (Quat.cross camera.top camera.dir camera.lim) in
       let xwidth = tan (camera.fov /. 2.0) in (* Screen size *)
       let ywidth = xwidth /. camera.ratio in
       let x_dist = xwidth /. float_of_int xres in (* Pixel distance on screen *)
       let y_dist = ywidth /. float_of_int yres in
-      let x_vect = Vect.mul x_dist cam_left
-      and y_vect = Vect.mul y_dist camera.top
+      let x_vect = Quat.mulc ~c:x_dist ~q:cam_left
+      and y_vect = Quat.mulc ~c:y_dist ~q:camera.top
       in
       let ray_of_xy x y =
         let x_times = float_of_int (x - (xres / 2))
         and y_times = float_of_int (y - (yres / 2)) in
-        let base = Vect.add (Vect.mul x_times x_vect) (Vect.mul y_times y_vect)
+        let base = Quat.add (Quat.mulc ~c:x_times ~q:x_vect) (Quat.mulc ~c:y_times ~q:y_vect)
         in
 	  incr cnt;
-	  Ray.create ~dir:(Vect.add base camera.dir) ~start:camera.loc ();
+	  Ray.create ~dir:(Quat.add base camera.dir) ~start:camera.loc ();
       in
         ray_of_xy
   end
@@ -446,7 +382,7 @@ module Julia =
       let rec loop t =
 	(* point - point being tested for distance from julia set
 	 * d0 - derivative start *)
-	let point = Quat.fromvect (Ray.point_of_t ~ray ~t) in
+	let point = Ray.point_of_t ~ray ~t in
 (*	  printf "Point = ";
 	  Quat.print point;
 	  printf "; \n"; *)
@@ -484,6 +420,8 @@ module Julia =
 	Quat.add point (Quat.create 0. (-.d) 0. 0.);
 	Quat.add point (Quat.create 0. 0. d 0.);
 	Quat.add point (Quat.create 0. 0. (-.d) 0.);
+	Quat.add point (Quat.create 0. 0. 0. d);
+	Quat.add point (Quat.create 0. 0. 0. (-.d));
       |] in
       let step i z = dd.(i) <- step ~z ~c:julia.c in
       let rec loop iter =
@@ -493,11 +431,12 @@ module Julia =
 	loop Cfg.max_iter;
 	let g_x = (Quat.len dd.(0)) -. (Quat.len dd.(1)) 
 	and g_y = (Quat.len dd.(2)) -. (Quat.len dd.(3)) 
-	and g_z = (Quat.len dd.(4)) -. (Quat.len dd.(5)) in
+	and g_z = (Quat.len dd.(4)) -. (Quat.len dd.(5))
+	and g_w = (Quat.len dd.(6)) -. (Quat.len dd.(7)) in
 (*	  pt_debug dd.(0);
 	  pt_debug dd.(1);
 	  printf "Got %10.5f %10.5f %10.5f\n" g_x g_y g_z; *)
-	  (g_x, g_y, g_z)
+	  Quat.create g_x g_y g_z g_w
 
   end
 
@@ -511,13 +450,10 @@ module Render =
     (* The main tracing program created in render *)
     let rec tracer ~background ~ambient ~depth ~lights ~julia ~ray =
       (* Find collision point with julia *)
-      let point, t = Julia.intersect ~julia ~ray in
-      let x, y, z, _ = Quat.get point in 
-      let collision_point = Vect.create x y z in
+      let collision_point, t = Julia.intersect ~julia ~ray in
         if t < Cfg.eps then ( (* EPS! *)
 	  (* Calculate normal *)
-	  let nx, ny, nz = Julia.normal ~julia ~point in
-	  let normal = Vect.normalize (Vect.create nx ny nz) in
+	  let normal = Quat.normalize (Julia.normal ~julia ~point:collision_point) in
 	  (* Read color info at collision point *)
 
 	  let diffuse = Julia.get_color ~julia in
@@ -543,7 +479,7 @@ module Render =
 	      in
 	      let light_dir = Ray.get_dir light_ray in
 	      let diffuse_coeff =
-                light_visibility *. Vect.dot normal light_dir
+                light_visibility *. Quat.dot normal light_dir
 	      in
                 (* Take in account computations for previous lights
 		   and light colour *)
@@ -614,20 +550,20 @@ module Render =
 let _ =
   let julia = Julia.create ()
   and lights = [
-    (Vect.create 3. 8. (-5.)),
+    (Quat.create 3. 8. (-5.) 0.),
     (Color.create 0.3 0.3 0.3)
   ]
     
   and camera = Camera.create 
-    ~loc:(Vect.create (0.0) 0.0 (-6.0)) 
-    ~dir:(Vect.create 0.0 0.0 1.0)
+    ~loc:(Quat.create 0. 0. (-6.0) 0.) 
+    ~dir:(Quat.create 0. 0. 1.0 0.)
     ()
   and ambient = Color.create 0.1 0.1 0.1
   and background = Color.create 0.5 0.5 0.5 in
     
   let test_ray = Ray.ray_of_points 
-    ~source:(Vect.create 0.0 0.0 (-9.0))
-    ~destination:(Vect.create 0.0 0.0 1.0)
+    ~source:(Quat.create 0.0 0.0 (-9.0) 0.)
+    ~destination:(Quat.create 0.0 0.0 1.0 0.)
   in
     if false then (
       Julia.intersect ~julia ~ray:test_ray;
