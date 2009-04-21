@@ -14,6 +14,8 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <cstring>
+#include <cstdlib>
 
 #include "Matrix.hh"
 #include "General/Debug.hh"
