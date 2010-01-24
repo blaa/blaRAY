@@ -11,11 +11,10 @@
  *********************/
 
 #include <iostream>
-#include <string>
-#include <sstream>
-#include <iomanip>
 #include <cstring>
+#include <sstream>
 #include <cstdlib>
+#include <iomanip>
 
 #include "Matrix.hh"
 #include "General/Debug.hh"

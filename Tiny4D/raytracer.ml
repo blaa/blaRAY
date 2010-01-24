@@ -1,6 +1,6 @@
- (* Tiny Objective Caml Raytracer	*)
-(* (C) 2008 by Tomasz bla Fortuna	*)
-(* License: GPLv3+			*)
+ (* Tiny Objective Caml Raytracer        *)
+(* (C) 2008 by Tomasz bla Fortuna        *)
+(* License: GPLv3+                        *)
 
 open Printf
 
@@ -69,9 +69,9 @@ module Color =
       } in
       let summed = List.fold_left add black lst in
         {
-	  r = crop summed.r;
-	  g = crop summed.g;
-	  b = crop summed.b;
+          r = crop summed.r;
+          g = crop summed.g;
+          b = crop summed.b;
         }
 
     let mul a c = {
@@ -95,9 +95,9 @@ module Color =
       } in
       let summed = List.fold_left add black lst in
         {
-	  r = summed.r /. length;
-	  g = summed.g /. length;
-	  b = summed.b /. length;
+          r = summed.r /. length;
+          g = summed.g /. length;
+          b = summed.b /. length;
         }
   end
 
@@ -191,6 +191,27 @@ module Quat =
       z = a.x*.b.z -. a.y*.b.w +. a.z*.b.x +. a.w*.b.y;
       w = a.x*.b.w +. a.y*.b.z -. a.z*.b.y +. a.w*.b.x;
     }
+  
+    let mul1 a b = {
+      x = a.x*.b.x;
+      y = a.x*.b.y;
+      z = a.x*.b.z;
+      w = a.x*.b.w;
+    }
+
+    let mul2 a b = {
+      x = a.x*.b.x -. a.y*.b.y;
+      y = a.x*.b.y +. a.y*.b.x;
+      z = a.x*.b.z -. a.y*.b.w;
+      w = a.x*.b.w +. a.y*.b.z;
+    }
+
+    let mul3 a b = {
+      x = a.x*.b.x -. a.y*.b.y -. a.z*.b.z;
+      y = a.x*.b.y +. a.y*.b.x +. a.z*.b.w;
+      z = a.x*.b.z -. a.y*.b.w +. a.z*.b.x;
+      w = a.x*.b.w +. a.y*.b.z -. a.z*.b.y;
+    }
 
     let cross a b c = {
       x = a.y*.(b.w*.c.z -. b.z*.c.w) +. b.y*.(a.z*.c.w -. a.w*.c.z) +. c.y*.(a.w*.b.z -. a.z*.b.w);
@@ -214,10 +235,10 @@ module Quat =
 
     let normalize a =
       let len = len a in {
-	  x = a.x /. len;
-	  y = a.y /. len;
-	  z = a.z /. len;
-	  w = a.w /. len;
+          x = a.x /. len;
+          y = a.y /. len;
+          z = a.z /. len;
+          w = a.w /. len;
         }
   end
 
@@ -297,7 +318,7 @@ module Camera =
         ?(loc=Quat.create 0. 0. (-7.) 0.)
         ?(dir=Quat.create 0. 0. 1. 0.)
         ?(top=Quat.create 0. 1. 0. 0.)
-	?(lim=Quat.create 0. 0. 0. 1.)
+        ?(lim=Quat.create 0. 0. 0. 1.)
         ?(fov=fov_of_degree 45.0)
         ?(ratio=4.0/.3.0)
         ?(auto_top=false)
@@ -305,20 +326,20 @@ module Camera =
       let dir' = Quat.normalize dir in
       let top' =
         if auto_top then
-	  (* top.x = dir.x, top.z = dir.z
-	     top.y calculated from constraint: top dot dir = 0 *)
-	  let (dx, dy, dz, dw) = Quat.get dir in
-	  let ty = -. (dz ** 2.0 +. dx ** 2.0) /. dy in (* FIXME! *)
-	    Quat.create dx ty dz dw
+          (* top.x = dir.x, top.z = dir.z
+             top.y calculated from constraint: top dot dir = 0 *)
+          let (dx, dy, dz, dw) = Quat.get dir in
+          let ty = -. (dz ** 2.0 +. dx ** 2.0) /. dy in (* FIXME! *)
+            Quat.create dx ty dz dw
         else
-	  top
+          top
       in {
-	  loc = loc;
-	  dir = dir';
-	  top = Quat.normalize top';
-	  lim = Quat.normalize lim;
-	  fov = fov;
-	  ratio = ratio;
+          loc = loc;
+          dir = dir';
+          top = Quat.normalize top';
+          lim = Quat.normalize lim;
+          fov = fov;
+          ratio = ratio;
         }
 
     (* Generates camera-function which generates rays for specified x,y *)
@@ -336,8 +357,8 @@ module Camera =
         and y_times = float_of_int (y - (yres / 2)) in
         let base = Quat.add (Quat.mulc ~c:x_times ~q:x_vect) (Quat.mulc ~c:y_times ~q:y_vect)
         in
-	  incr cnt;
-	  Ray.create ~dir:(Quat.add base camera.dir) ~start:camera.loc ();
+          incr cnt;
+          Ray.create ~dir:(Quat.add base camera.dir) ~start:camera.loc ();
       in
         ray_of_xy
   end
@@ -361,82 +382,82 @@ module Julia =
       Quat.add (Quat.square z) c
 
     let intersect ~julia ~ray =
-      printf "Intersecting julia with ray ";
+(*      printf "Intersecting julia with ray ";
       Ray.print ray;
-      printf "\n";
+      printf "\n"; *)
 
 
       let rec limes ~zn ~dn ~iter =
-	let zn' = step ~z:zn ~c:julia.c
-	and dn' = Quat.mulc ~q:(Quat.mul zn dn) ~c:2.0 in
-	let len2 = Quat.len2 zn' in
-(*	  printf "Limes point=";
-	  Quat.print zn';
-	  printf " %d iterleft \n" iter; *)
-	  if iter = 0 (* or len2 > Cfg.max_inf *)then
-	    len2, dn'
-	  else
-	    limes ~zn:zn' ~dn:dn' ~iter:(iter - 1)
+        let zn' = step ~z:zn ~c:julia.c in
+               let dn' = Quat.mulc ~q:(Quat.mul zn dn) ~c:2.0 in
+              let len2 = Quat.len2 zn' in
+(*          printf "Limes point=";
+          Quat.print zn';
+          printf " %d iterleft \n" iter; *)
+          if iter = 0  or len2 > Cfg.max_inf then
+            len2, dn'
+          else
+            limes ~zn:zn' ~dn:dn' ~iter:(iter - 1)
       in
 
       let rec loop t =
-	(* point - point being tested for distance from julia set
-	 * d0 - derivative start *)
-	let point = Ray.point_of_t ~ray ~t in
-(*	  printf "Point = ";
-	  Quat.print point;
-	  printf "; \n"; *)
+        (* point - point being tested for distance from julia set
+         * d0 - derivative start *)
+        let point = Ray.point_of_t ~ray ~t in
+(*          printf "Point = ";
+          Quat.print point;
+          printf "; \n"; *)
 
-	  if (Quat.len2 point) > Cfg.bounding_sphere then (
-	    printf "Out of sphere!\n";
+          if (Quat.len2 point) > Cfg.bounding_sphere then (
+(*            printf "Out of sphere!\n"; *)
 
-	    point, infinity
-	  ) else (	    
+            point, infinity
+          ) else (            
 
-	    let d0 = Quat.create 1. 0. 0. 0. in
-	    let len2, dn = limes ~zn:point ~dn:d0 ~iter:Cfg.max_iter in
-	    let len = sqrt len2 in
-	    let dist = 0.5 *. (log len) *. len /. (Quat.len dn) in
-	    let t' = t +. dist in
-	      printf "dist=%10.5f " dist;
-	      if dist < Cfg.eps then (
-		printf "Found!\n";
-		point, dist
-	      ) else (
-		printf "Looping...\n";
-		loop t'
-	      )
+            let d0 = Quat.create 1. 0. 0. 0. in
+            let len2, dn = limes ~zn:point ~dn:d0 ~iter:Cfg.max_iter in
+            let len = sqrt len2 in
+            let dist = 0.5 *. (log len) *. len /. (Quat.len dn) in
+            let t' = t +. dist in
+(*              printf "dist=%10.5f " dist; *)
+              if dist < Cfg.eps then (
+ (*                printf "Found!\n"; *)
+                point, dist
+              ) else (
+(*                 printf "Looping...\n"; *)
+                loop t'
+              )
           )
       in
-	loop 0.0
+        loop 0.0
 
     (* Gradient normal *)
     let normal ~julia ~point =
       let d = Cfg.delta in
       let dd = [|
-	Quat.add point (Quat.create d 0. 0. 0.);
-	Quat.add point (Quat.create (-.d) 0. 0. 0.);
-	Quat.add point (Quat.create 0. d 0. 0.);
-	Quat.add point (Quat.create 0. (-.d) 0. 0.);
-	Quat.add point (Quat.create 0. 0. d 0.);
-	Quat.add point (Quat.create 0. 0. (-.d) 0.);
-	Quat.add point (Quat.create 0. 0. 0. d);
-	Quat.add point (Quat.create 0. 0. 0. (-.d));
+        Quat.add point (Quat.create d 0. 0. 0.);
+        Quat.add point (Quat.create (-.d) 0. 0. 0.);
+        Quat.add point (Quat.create 0. d 0. 0.);
+        Quat.add point (Quat.create 0. (-.d) 0. 0.);
+        Quat.add point (Quat.create 0. 0. d 0.);
+        Quat.add point (Quat.create 0. 0. (-.d) 0.);
+        Quat.add point (Quat.create 0. 0. 0. d);
+        Quat.add point (Quat.create 0. 0. 0. (-.d));
       |] in
       let step i z = dd.(i) <- step ~z ~c:julia.c in
       let rec loop iter =
-	Array.iteri step dd;
-	if iter <> 0 then loop (iter - 1)
+        Array.iteri step dd;
+        if iter <> 0 then loop (iter - 1)
       in
-	loop Cfg.max_iter;
-	let g_x = (Quat.len dd.(0)) -. (Quat.len dd.(1)) 
-	and g_y = (Quat.len dd.(2)) -. (Quat.len dd.(3)) 
-	and g_z = (Quat.len dd.(4)) -. (Quat.len dd.(5))
-	and g_w = (Quat.len dd.(6)) -. (Quat.len dd.(7)) in
-(*	  pt_debug dd.(0);
-	  pt_debug dd.(1);
-	  printf "Got %10.5f %10.5f %10.5f\n" g_x g_y g_z; *)
-	  Quat.create g_x g_y g_z g_w
+        loop Cfg.max_iter;
+        let g_x = (Quat.len dd.(0)) -. (Quat.len dd.(1)) 
+        and g_y = (Quat.len dd.(2)) -. (Quat.len dd.(3)) 
+        and g_z = (Quat.len dd.(4)) -. (Quat.len dd.(5))
+        and g_w = (Quat.len dd.(6)) -. (Quat.len dd.(7)) in
+(*          pt_debug dd.(0);
+          pt_debug dd.(1);
+          printf "Got %10.5f %10.5f %10.5f\n" g_x g_y g_z; *)
+          Quat.create g_x g_y g_z g_w
 
   end
 
@@ -452,52 +473,52 @@ module Render =
       (* Find collision point with julia *)
       let collision_point, t = Julia.intersect ~julia ~ray in
         if t < Cfg.eps then ( (* EPS! *)
-	  (* Calculate normal *)
-	  let normal = Quat.normalize (Julia.normal ~julia ~point:collision_point) in
-	  (* Read color info at collision point *)
+          (* Calculate normal *)
+          let normal = Quat.normalize (Julia.normal ~julia ~point:collision_point) in
+          (* Read color info at collision point *)
 
-	  let diffuse = Julia.get_color ~julia in
+          let diffuse = Julia.get_color ~julia in
 
-	  (* Function to be 'left folded' over lights list
-	     it checks shadow rays for diffuse + specular lightening *)
-	  let light_check diffuse light =
-	    let light_pos, light_color = light in
-	    let light_ray =
-	      Ray.ray_of_points
+          (* Function to be 'left folded' over lights list
+             it checks shadow rays for diffuse + specular lightening *)
+          let light_check diffuse light =
+            let light_pos, light_color = light in
+            let light_ray =
+              Ray.ray_of_points
                 ~source:collision_point
                 ~destination:light_pos
-	    in 
-	      incr shadow_rays; 
+            in 
+              incr shadow_rays; 
 
-(*	      let point, distance, _ =
+(*              let point, distance, _ =
                 Scene.find_collision ~ray:light_ray in *)
-	      let light_visibility = 1.0
+              let light_visibility = 1.0
 (*                if distance > 0.1 then
-		  1.0
+                  1.0
                 else
-		  0.0 *)
-	      in
-	      let light_dir = Ray.get_dir light_ray in
-	      let diffuse_coeff =
+                  0.0 *)
+              in
+              let light_dir = Ray.get_dir light_ray in
+              let diffuse_coeff =
                 light_visibility *. Quat.dot normal light_dir
-	      in
+              in
                 (* Take in account computations for previous lights
-		   and light colour *)
+                   and light colour *)
                 Color.add [
-		  diffuse;
-		  Color.mul diffuse_coeff light_color
+                  diffuse;
+                  Color.mul diffuse_coeff light_color
                 ]
-	  in
+          in
 
-	  (* fold this function and calculate diffuse and specular light intensity *)
-	  let diffuse_color =
-	    List.fold_left light_check Color.black lights in
+          (* fold this function and calculate diffuse and specular light intensity *)
+          let diffuse_color =
+            List.fold_left light_check Color.black lights in
 
 
-	  let result = Color.combine (Color.add [ambient; diffuse_color]) diffuse in
-	    `COLOR result
+          let result = Color.combine (Color.add [ambient; diffuse_color]) diffuse in
+            `COLOR result
         )else (
-	  `BACKGROUND
+          `BACKGROUND
         )
 
 
@@ -507,44 +528,57 @@ module Render =
         ~xres ~yres ~camera ~lights ~julia () =
 
       let ray_iter ~put_pixel ~tracer =
-	let trace_for_color ray =
+        let trace_for_color ray =
           match tracer ~ray with
-	    | `BACKGROUND -> background
-	    | `COLOR c -> c
-	in
-	let ray_of_xy =
-	  Camera.gen_ray_of_xy
-	    ~cnt:main_rays
-	    ~xres ~yres
-	    ~camera
-	in
-	  for y = yres downto 0 do
-	    for x = 0 to xres do
+            | `BACKGROUND -> background
+            | `COLOR c -> c
+        in
+        let ray_of_xy =
+          Camera.gen_ray_of_xy
+            ~cnt:main_rays
+            ~xres ~yres
+            ~camera
+        in
+          for y = yres downto 0 do
+            for x = 0 to xres do
               let ray = ray_of_xy x y in
               let color = trace_for_color ray in
-		put_pixel x y color
-	    done;
-	  done
+                put_pixel x y color
+            done;
+          done
       in
 
-	printf "*** Rendering scene ***\n";
-	let time1 = Unix.time () in
+        printf "*** Rendering scene ***\n";
+        let time1 = Unix.time () in
 
-	  Camera.print camera;
-	  Graph.start xres yres;
+          Camera.print camera;
+          Graph.start xres yres;
 
-	  ray_iter ~put_pixel:Graph.put_pixel ~tracer:(tracer ~background ~ambient ~lights ~julia ~depth:8);
-	  
-	  printf "(%d main rays) (%d shadow rays) "
-	    !main_rays !shadow_rays;
-	  printf "traced = %d in %5.2f seconds\n%!"
-	    (!main_rays + !shadow_rays)
-	    (Unix.time () -. time1);
-	  
-	  Graph.wait ();
-	  Graph.stop ();
+          ray_iter ~put_pixel:Graph.put_pixel ~tracer:(tracer ~background ~ambient ~lights ~julia ~depth:8);
+          
+          printf "(%d main rays) (%d shadow rays) "
+            !main_rays !shadow_rays;
+          printf "traced = %d in %5.2f seconds\n%!"
+            (!main_rays + !shadow_rays)
+            (Unix.time () -. time1);
+          
+          Graph.wait ();
+          Graph.stop ();
   end
 
+let _ = 
+  let a = Quat.create 0.1 2.0 3.0 (-4.4)
+  and b = Quat.create 1.0 0.5 0.3 0.4 in
+  Quat.print (Quat.mul1 a b);
+  printf "\n";
+  Quat.print (Quat.mul2 a b);
+  printf "\n";
+  Quat.print (Quat.mul3 a b);
+  printf "\n";
+  Quat.print (Quat.mul a b);
+  printf "\n";
+
+;;
 
 (* Scene settings + renderer settings + render *)
 let _ =
@@ -574,3 +608,4 @@ let _ =
     )
 
 ;;
+
